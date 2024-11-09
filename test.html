@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test RokCalendar Firebase</title>
+</head>
+<body>
+    <h2>Test Connessione Firebase</h2>
+    <div id="status"></div>
+
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+    <script>
+        // Incolla qui il tuo firebaseConfig
+        const firebaseConfig = {
+  apiKey: "AIzaSyAGdQa0SdgpjnfYGOKq6Iuzan_IUmquY3Q",
+  authDomain: "rokcalendar-502a7.firebaseapp.com",
+  databaseURL: "https://rokcalendar-502a7-default-rtdb.europe-west1.firebasedatabase.app/",
+  projectId: "rokcalendar-502a7",
+  storageBucket: "rokcalendar-502a7.firebasestorage.app",
+  messagingSenderId: "232572972605",
+  appId: "1:232572972605:web:606cb95729e96523914454"
+};
+
+        // Test di connessione
+        try {
+            firebase.initializeApp(firebaseConfig);
+            const db = firebase.database();
+            
+            db.ref('.info/connected').on('value', (snap) => {
+                const status = document.getElementById('status');
+                if (snap.val() === true) {
+                    status.textContent = '✅ Connesso a Firebase';
+                    status.style.color = 'green';
+                } else {
+                    status.textContent = '❌ Non connesso a Firebase';
+                    status.style.color = 'red';
+                }
+            });
+
+            // Test di scrittura
+            db.ref('test').set({
+                timestamp: Date.now(),
+                message: 'Test di connessione'
+            })
+            .then(() => console.log('Test di scrittura riuscito'))
+            .catch(error => console.error('Errore di scrittura:', error));
+
+        } catch (error) {
+            document.getElementById('status').textContent = 
+                '❌ Errore di inizializzazione: ' + error.message;
+            console.error('Errore:', error);
+        }
+    </script>
+</body>
+</html> 

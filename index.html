@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>RokCalendar</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <button id="todayBtn">Vai a Oggi</button>
+    
+    <div class="calendar-container">
+        <table id="calendar">
+            <thead>
+                <tr id="header-row">
+                    <th>Data</th>
+                </tr>
+            </thead>
+            <tbody id="calendar-body"></tbody>
+        </table>
+    </div>
+
+    <div class="color-picker" id="colorPicker">
+        <button class="color-btn" data-color="#FFFFFF" style="background-color: #FFFFFF"></button>
+        <button class="color-btn" data-color="#D4B8B8" style="background-color: #D4B8B8"></button>
+        <button class="color-btn" data-color="#FFB6B6" style="background-color: #FFB6B6"></button>
+        <button class="color-btn" data-color="#B6B6FF" style="background-color: #B6B6FF"></button>
+        <button class="color-btn" data-color="#B8D4B8" style="background-color: #B8D4B8"></button>
+        
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+    <script src="script.js"></script>
+</body>
+</html> 
