@@ -90,13 +90,25 @@ function showColorPicker(cell) {
 function scrollToToday() {
     const today = new Date();
     const formattedDate = formatDate(today);
-    
-    // Trova la cella con la data odierna
     const todayCell = document.querySelector(`td[data-date="${formattedDate}"]`);
     
     if (todayCell) {
-        // Scorri alla riga odierna con un piccolo offset verso l'alto
-        todayCell.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        // Crea un elemento temporaneo sopra la cella target
+        const tempMarker = document.createElement('div');
+        tempMarker.style.position = 'absolute';
+        tempMarker.style.height = '1px';
+        tempMarker.style.width = '1px';
+        tempMarker.style.visibility = 'hidden';
+        todayCell.parentNode.insertBefore(tempMarker, todayCell);
+
+        // Scorri all'elemento temporaneo
+        tempMarker.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'center'
+        });
+
+        // Rimuovi l'elemento temporaneo dopo lo scroll
+        setTimeout(() => tempMarker.remove(), 1000);
     }
 }
 
