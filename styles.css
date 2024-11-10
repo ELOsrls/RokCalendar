@@ -66,13 +66,40 @@ td[contenteditable="true"]:not(:empty) {
 }
 
 .color-picker {
-    display: none;
-    padding: 5px;
-    background: white;
-    border: 1px solid #ccc;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-    border-radius: 5px;
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     z-index: 1000;
+    display: flex;
+    gap: 10px;
+}
+
+.color-btn {
+    width: 40px;
+    height: 40px;
+    border: 2px solid #ddd;
+    border-radius: 50%;
+    cursor: pointer;
+    padding: 0;
+}
+
+@media screen and (max-width: 768px) {
+    .color-picker {
+        bottom: 10px;
+        padding: 8px;
+        width: 90%;
+        justify-content: space-around;
+    }
+
+    .color-btn {
+        width: 35px;
+        height: 35px;
+    }
 }
 
 .color-picker::-webkit-scrollbar {
@@ -199,21 +226,4 @@ td:first-child {
     justify-content: center;
     align-items: center;
     height: 18px;         /* altezza ridotta a 18px */
-}
-
-/* Stili specifici per mobile */
-@media (max-width: 768px) {
-    .color-picker {
-        padding: 10px;
-        width: auto;
-        display: flex;
-        justify-content: center;
-        gap: 10px;
-    }
-    
-    .color-btn {
-        width: 30px;  /* bottoni più grandi su mobile */
-        height: 30px;
-        border-radius: 15px;
-    }
 }
