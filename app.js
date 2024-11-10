@@ -133,6 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Passa al giorno successivo
         currentDate = new Date(currentDate.getTime() + 24 * 60 * 60 * 1000);
+       
     }
 
     // Funzione per centrare la riga nella viewport
@@ -380,4 +381,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Inizializzazione all'avvio
     initializeRealtimeListeners();
+    scrollToToday();
 });

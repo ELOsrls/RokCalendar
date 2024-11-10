@@ -270,3 +270,86 @@ td.today:first-child {
 #goToToday:hover {
     background-color: #45a049;
 }
+
+/* Stile per la prima colonna (date) */
+td:first-child, th:first-child {
+    width: 14ch;
+    min-width: 14ch;
+    max-width: 14ch;
+    position: sticky;
+    left: 0;
+    background: white;
+    z-index: 2;
+    text-align: right;
+    padding-right: 10px;
+    font-weight: normal;
+    box-shadow: 2px 0 2px -1px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+/* Stile per tutte le altre colonne */
+td:not(:first-child), th:not(:first-child) {
+    width: 25ch;
+    min-width: 25ch;
+    max-width: 25ch;
+    overflow: hidden;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+}
+
+/* Stili base per tutte le celle */
+th, td {
+    border: 1px solid #ddd;
+    padding: 5px;
+    box-sizing: border-box;
+}
+
+/* Resto degli stili come prima */
+.calendar-container {
+    overflow: auto;
+    height: 90vh;
+    position: relative;
+}
+
+thead tr {
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: 3;
+    box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* Stile per la cella oggi */
+td.today {
+    background-color: #ffff00 !important;
+    z-index: 2;
+}
+
+/* Weekend e festivi */
+.weekend-row td {
+    background-color: #e8f5e9 !important;
+}
+
+/* Separatore mensile */
+.month-separator {
+    border-top: 3px solid red !important;
+}
+
+.month-separator td {
+    border-top: 3px solid red !important;
+}
+
+/* Assicurati che le celle dell'header rimangano visibili */
+thead th {
+    position: sticky;
+    top: 0;
+    background: white;
+}
+
+/* Stile per il testo nelle celle */
+td {
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.4;
+}
