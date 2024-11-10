@@ -172,3 +172,32 @@ td:first-child {
 th:first-child {
     font-size: 12px;
 }
+
+/* Stile base per tutte le celle */
+td {
+    height: 18px;         /* altezza ridotta a 18px */
+    min-height: 18px;     /* altezza minima ridotta a 18px */
+    padding: 4px 8px;     
+    line-height: 1.2;     
+    vertical-align: middle;
+    overflow: visible;    
+}
+
+/* Celle editabili */
+td[contenteditable="true"] {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    height: 18px;         /* altezza ridotta a 18px */
+    min-height: 18px;     /* altezza minima ridotta a 18px */
+}
+
+/* Cella della data (prima colonna) */
+td:first-child {
+    text-align: center;
+    font-weight: bold;
+    font-size: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 18px;         /* altezza ridotta a 18px */
+}

@@ -50,38 +50,31 @@ function showColorPicker(cell) {
     selectedCell = cell;
     const colorPicker = document.getElementById('colorPicker');
     
-    // Posiziona il color picker in alto a destra se la cella è attiva
-    if (cell.classList.contains('active')) {
-        colorPicker.style.position = 'fixed';
-        colorPicker.style.top = '20px';
-        colorPicker.style.right = '20px';
-        colorPicker.style.left = 'auto';
-    } else {
-        // Altrimenti posizionalo vicino alla cella
-        const cellRect = cell.getBoundingClientRect();
-        const windowWidth = window.innerWidth;
-        
-        colorPicker.style.position = 'absolute';
-        let leftPosition = cellRect.right + 5;
-        if (leftPosition + colorPicker.offsetWidth > windowWidth) {
-            leftPosition = cellRect.left - colorPicker.offsetWidth - 5;
-        }
-        colorPicker.style.left = leftPosition + 'px';
-        colorPicker.style.top = cellRect.top + 'px';
+    // Ottieni la posizione della cella
+    const cellRect = cell.getBoundingClientRect();
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    
+    // Posiziona il color picker 20px sopra la cella
+    colorPicker.style.position = 'absolute';
+    colorPicker.style.left = cellRect.left + 'px';
+    colorPicker.style.top = (cellRect.top + scrollTop - colorPicker.offsetHeight - 20) + 'px';
+    
+    // Se il color picker andrebbe fuori dallo schermo in alto, posizionalo sotto la cella
+    if (cellRect.top - colorPicker.offsetHeight - 20 < 0) {
+        colorPicker.style.top = (cellRect.bottom + scrollTop + 20) + 'px';
     }
     
     colorPicker.style.display = 'block';
     
-    // Pulizia dei timer esistenti
+    // Reset del timer
     if (colorPickerTimeout) {
         clearTimeout(colorPickerTimeout);
     }
     
-    // Timer per nascondere il color picker
     colorPickerTimeout = setTimeout(() => {
         colorPicker.style.display = 'none';
         selectedCell = null;
-    }, 10000); // 10 secondi
+    }, 10000);
 }
 
 function scrollToToday() {
@@ -148,6 +141,27 @@ function loadDataFromFirebase() {
     });
 }
 
+// Aggiungi questa funzione per verificare se una data è festiva
+function isHoliday(date) {
+    // Lista delle festività italiane (formato: MM-DD)
+    const holidays = [
+        '01-01', // Capodanno
+        '01-06', // Epifania
+        '04-25', // Liberazione
+        '05-01', // Festa del Lavoro
+        '06-02', // Festa della Repubblica
+        '08-15', // Ferragosto
+        '11-01', // Tutti i Santi
+        '12-08', // Immacolata Concezione
+        '12-25', // Natale
+        '12-26'  // Santo Stefano
+    ];
+    
+    // Formatta la data nel formato MM-DD
+    const monthDay = `${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+    return holidays.includes(monthDay);
+}
+
 function generateCalendar() {
     const tbody = document.getElementById('calendar-body');
     tbody.innerHTML = '';
@@ -181,8 +195,9 @@ function generateCalendar() {
         
         row.appendChild(dateCell);
         
-        if (isWeekend(currentDate)) {
-            row.classList.add('weekend');
+        // Aggiungi la classe per i weekend e i festivi
+        if (isWeekend(currentDate) || isHoliday(currentDate)) {
+            row.classList.add('weekend'); // Usa la stessa classe dei weekend per il colore verde
         }
         
         if (currentDate.getDate() === 1) {
@@ -496,5 +511,33 @@ function updateCellColor(cell, color) {
     const row = cell.parentElement.rowIndex;
     const col = cell.cellIndex;
     // ... resto del codice per Firebase
+}
+
+// Modifica la gestione dell'input nelle celle
+function setupCellListeners() {
+    document.querySelectorAll('td[contenteditable="true"]').forEach(cell => {
+        cell.addEventListener('input', () => {
+            lastEditedCell = cell;
+            
+            // Reset dell'altezza se la cella è vuota
+            if (!cell.textContent.trim()) {
+                cell.style.removeProperty('height');  // Rimuove l'altezza inline
+                cell.style.height = '18px';          // Ripristina l'altezza di default
+            }
+        }, { passive: true });
+        
+        // Gestione del blur (quando si perde il focus)
+        cell.addEventListener('blur', () => {
+            if (lastEditedCell) {
+                // Reset dell'altezza se la cella è vuota
+                if (!lastEditedCell.textContent.trim()) {
+                    lastEditedCell.style.removeProperty('height');
+                    lastEditedCell.style.height = '18px';
+                }
+                saveToFirebase(lastEditedCell);
+                lastEditedCell = null;
+            }
+        });
+    });
 }
 
