@@ -67,13 +67,12 @@ td[contenteditable="true"]:not(:empty) {
 
 .color-picker {
     display: none;
-    position: absolute;
+    padding: 5px;
     background: white;
     border: 1px solid #ccc;
-    padding: 10px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    border-radius: 5px;
     z-index: 1000;
-    overflow: hidden !important;
 }
 
 .color-picker::-webkit-scrollbar {
@@ -200,4 +199,21 @@ td:first-child {
     justify-content: center;
     align-items: center;
     height: 18px;         /* altezza ridotta a 18px */
+}
+
+/* Stili specifici per mobile */
+@media (max-width: 768px) {
+    .color-picker {
+        padding: 10px;
+        width: auto;
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+    }
+    
+    .color-btn {
+        width: 30px;  /* bottoni più grandi su mobile */
+        height: 30px;
+        border-radius: 15px;
+    }
 }

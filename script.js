@@ -50,18 +50,30 @@ function showColorPicker(cell) {
     selectedCell = cell;
     const colorPicker = document.getElementById('colorPicker');
     
-    // Ottieni la posizione della cella
-    const cellRect = cell.getBoundingClientRect();
-    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    // Rileva se è un dispositivo mobile
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     
-    // Posiziona il color picker 20px sopra la cella
-    colorPicker.style.position = 'absolute';
-    colorPicker.style.left = cellRect.left + 'px';
-    colorPicker.style.top = (cellRect.top + scrollTop - colorPicker.offsetHeight - 20) + 'px';
-    
-    // Se il color picker andrebbe fuori dallo schermo in alto, posizionalo sotto la cella
-    if (cellRect.top - colorPicker.offsetHeight - 20 < 0) {
-        colorPicker.style.top = (cellRect.bottom + scrollTop + 20) + 'px';
+    if (isMobile) {
+        // Su mobile, posiziona il color picker in una posizione fissa in alto
+        colorPicker.style.position = 'fixed';
+        colorPicker.style.left = '50%';
+        colorPicker.style.top = '10px';
+        colorPicker.style.transform = 'translateX(-50%)'; // Centra orizzontalmente
+        colorPicker.style.zIndex = '1000'; // Assicura che sia sopra altri elementi
+    } else {
+        // Su desktop, mantieni il comportamento esistente
+        const cellRect = cell.getBoundingClientRect();
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        
+        colorPicker.style.position = 'absolute';
+        colorPicker.style.left = cellRect.left + 'px';
+        colorPicker.style.top = (cellRect.top + scrollTop - colorPicker.offsetHeight - 20) + 'px';
+        colorPicker.style.transform = 'none';
+        
+        // Se il color picker andrebbe fuori dallo schermo in alto, posizionalo sotto
+        if (cellRect.top - colorPicker.offsetHeight - 20 < 0) {
+            colorPicker.style.top = (cellRect.bottom + scrollTop + 20) + 'px';
+        }
     }
     
     colorPicker.style.display = 'block';
