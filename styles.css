@@ -58,11 +58,11 @@ td[contenteditable="true"]:not(:empty) {
 }
 
 #todayBtn {
-    position: fixed;
-    top: 10px;
-    left: 10px;
+    position: sticky;
+    top: 0;
+    z-index: 101;
+    background-color: white;
     padding: 8px 16px;
-    z-index: 1000;
 }
 
 .color-picker {
@@ -215,4 +215,11 @@ td:first-child {
     justify-content: center;
     align-items: center;
     height: 18px;         /* altezza ridotta a 18px */
+}
+
+#header-row {
+    position: sticky;
+    top: 0;
+    background-color: white; /* o il colore che preferisci */
+    z-index: 100;
 }
