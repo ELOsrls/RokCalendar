@@ -1,245 +1,269 @@
 body {
     font-family: Arial, sans-serif;
-    margin: 20px;
 }
 
 .calendar-container {
+    overflow: auto;
+    height: 90vh;
     position: relative;
-    max-height: 100vh;
-    overflow-y: auto;
-    width: 100%;
-    overflow-x: hidden;
-}
-
-#calendar thead {
-    position: sticky;
-    top: 0;
-    background-color: white;
-    z-index: 100;
-}
-
-
-
-#calendar thead th {
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    position: sticky;
-    top: 0;
-    background-color: #fff; /* Facoltativo: previene la sovrapposizione del testo */
-    z-index: 1; /* Facoltativo: assicura che l'intestazione rimanga sopra le altre righe */
 }
 
 table {
     border-collapse: collapse;
     width: 100%;
+    table-layout: fixed;
 }
 
 th, td {
     border: 1px solid #ddd;
-    padding: 4px 8px;
-    width: 150px;
-    max-width: 15ch;
-    font-family: Arial, sans-serif;
-    font-size: 14px;
+    padding: 5px;
+    width: calc(15ch + 10px);
+    min-height: 15px;
+    height: auto;
+    transition: height 0.2s ease;
+    font-family: Arial;
+    position: relative;
+    vertical-align: top;
     white-space: pre-wrap;
     word-wrap: break-word;
-    vertical-align: middle;
-    line-height: 1.2;
-    height: 15px;
-    text-align: center;
+    overflow-wrap: break-word;
 }
 
-td[contenteditable="true"]:not(:empty) {
-    height: auto;
-    text-align: left;
+td[contenteditable="true"] {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    min-height: 15px;
+}
+
+thead tr {
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: 3;
+    box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.1);
+}
+
+td:first-child, th:first-child {
+    position: sticky;
+    left: 0;
+    background: #f5f5f5;
+    z-index: 2;
 }
 
 .weekend {
-    background-color: #E8F5E9;
+    background-color: #e8f5e9;
 }
 
 .today {
-    background-color: #ffff00 !important;
+    background-color: #ffff00 !important; /* Giallo fluo */
 }
 
 .month-separator {
-    border-top: 3px solid red;
+    border-top: 3px solid red !important;
 }
 
-#todayBtn {
-    position: fixed;
-    top: 10px;
-    left: 10px;
-    padding: 8px 16px;
-    z-index: 1000;
+.month-separator td {
+    border-top: 3px solid red !important;
 }
 
 .color-picker {
-    position: absolute;
     display: none;
+    position: absolute;
+    background: white;
+    border: 1px solid #ddd;
+    padding: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    z-index: 1000;
 }
 
 .color-btn {
     width: 20px;
     height: 20px;
-    border: none;
-    cursor: pointer;
-    margin: 2px;
-}
-
-@media screen and (max-width: 768px) {
-    .color-picker {
-        display: flex !important;
-        visibility: visible !important;
-        opacity: 1 !important;
-    }
-
-    .color-btn {
-        width: 35px;
-        height: 35px;
-    }
-}
-
-.color-picker::-webkit-scrollbar {
-    display: none;
-}
-
-.color-picker {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-}
-
-.color-btn {
-    width: 30px;
-    height: 30px;
     margin: 2px;
     border: 1px solid #999;
     cursor: pointer;
-    border-radius: 4px;
-    transition: transform 0.1s;
 }
 
 .color-btn:hover {
-    transform: scale(1.1);
     border-color: #333;
 }
 
-td[contenteditable="true"]:focus {
-    outline: 2px solid #007bff;
+.weekend-row td {
+    background-color: #e8f5e9 !important; /* Verde pastello */
 }
 
-/* Assicuriamoci che il colore del weekend non sovrascriva il giallo della data odierna */
-.weekend td:not(.today) {
-    background-color: #E8F5E9;
+/* Assicurati che il colore della cella today abbia priorità */
+.weekend-row td.today {
+    background-color: #ffff00 !important;
 }
 
-.selected-cell {
-    outline: 2px solid #ff0022;
+/* Stili per le celle quando sono selezionate o hanno un colore personalizzato */
+td[style*="background-color"] {
+    background-color: inherit;
 }
 
-.progress-bar-container {
-    width: 100%;
-    height: 4px;
-    background-color: #eee;
-    margin-top: 5px;
-    border-radius: 2px;
-    overflow: hidden;
+/* Mantieni lo sfondo bianco per l'header */
+thead tr th {
+    background-color: white !important;
 }
 
-.progress-bar {
-    width: 100%;
-    height: 100%;
-    background-color: #007bff;
-    transition: width linear 0.1s;
+/* Mantieni lo sfondo bianco per la prima colonna quando è sticky */
+td:first-child[style*="position: sticky"],
+th:first-child[style*="position: sticky"] {
+    background-color: white !important;
 }
 
-td[contenteditable="true"] {
-    white-space: pre-wrap;
-    word-wrap: break-word;
-    padding: 4px 8px;
-    vertical-align: top;
-    line-height: 1.2;
+/* Assicurati che il separatore sia visibile anche con altri stili */
+.weekend-row.month-separator td {
+    border-top: 3px solid red !important;
 }
 
-td:hover:not(.active) .color-picker {
-    display: block;
-    position: absolute;
+.month-separator td.today {
+    border-top: 3px solid red !important;
 }
 
-td.active .color-picker {
-    display: none;
-}
-
-.color-picker.fixed-position {
-    display: block;
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    z-index: 1000;
-}
-
-td.active {
-    outline: 5px solid #007bff;
-}
-
-/* Manteniamo il testo della data centrato */
+/* Allineamento delle date nella prima colonna */
 td:first-child {
-    font-weight: bold;
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 12px;
+    text-align: right;
+    padding-right: 10px;
+    font-weight: normal;
 }
 
-/* Se hai anche l'header, aggiungi questo */
+/* Mantieni l'header allineato a sinistra */
 th:first-child {
-    font-size: 12px;
-}
-
-/* Stile base per tutte le celle */
-td {
-    height: 18px;         /* altezza ridotta a 18px */
-    min-height: 18px;     /* altezza minima ridotta a 18px */
-    padding: 4px 8px;     
-    line-height: 1.2;     
-    vertical-align: middle;
-    overflow: visible;    
-}
-
-/* Celle editabili */
-td[contenteditable="true"] {
-    white-space: pre-wrap;
-    word-wrap: break-word;
-    height: 18px;         /* altezza ridotta a 18px */
-    min-height: 18px;     /* altezza minima ridotta a 18px */
-}
-
-/* Cella della data (prima colonna) */
-td:first-child {
-    text-align: center;
-    font-weight: bold;
-    font-size: 12px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 18px;         /* altezza ridotta a 18px */
-}
-
-#header-row {
-    position: fixed;
-    top: 0;
+    position: sticky;
     left: 0;
-    right: 0;
+    top: 0;
     background: white;
-    z-index: 1000;
-    width: 100%;
+    z-index: 3 !important; /* Priorità massima per stare sopra tutto */
 }
 
-#calendar-body {
-    padding-top: 50px; /* Aggiungi spazio per compensare l'header fixed */
+/* Stile per l'header fisso (tutta la prima riga) */
+thead tr {
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: 3;  /* Aumentato per stare sopra la colonna fissa */
 }
 
-#calendar {
-    width: 100%;
-    border-collapse: collapse;
+/* Stile per la prima colonna fissa */
+td:first-child {
+    position: sticky;
+    left: 0;
+    background: white;
+    z-index: 2;
+    text-align: right;
+    padding-right: 10px;
+    font-weight: normal;
+    box-shadow: 2px 0 2px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* Stile per la cella nell'angolo (Giorno) */
+th:first-child {
+    position: sticky;
+    left: 0;
+    z-index: 4;  /* Il più alto per stare sopra tutto */
+    background: white;
+    text-align: left;
+    padding-left: 10px;
+    box-shadow: 2px 2px 2px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* Stili base per tutte le celle */
+th, td {
+    border: 1px solid #ddd;
+    padding: 5px;
+    min-width: 120px;
+    background: white;
+}
+
+/* Stili per le celle normali */
+td {
+    background: white;
+}
+
+/* Mantieni gli stili esistenti */
+.today {
+    background-color: #ffff00 !important;
+}
+
+.weekend-row td {
+    background-color: #e8f5e9 !important;
+}
+
+/* Assicurati che la prima colonna mantenga il suo sfondo anche nei weekend */
+.weekend-row td:first-child {
+    background-color: #f5f5f5 !important;
+}
+
+/* Gestione dei separatori mensili */
+.month-separator {
+    border-top: 3px solid red !important;
+}
+
+.month-separator td {
+    border-top: 3px solid red !important;
+}
+
+/* Assicurati che le celle dell'header rimangano visibili durante lo scroll orizzontale */
+thead th {
+    position: sticky;
+    top: 0;
+    background: white;
+}
+
+/* Box shadow per evidenziare meglio le parti fisse */
+thead tr {
+    box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.1);
+}
+
+td:first-child {
+    box-shadow: 2px 0 2px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* Gestione dell'angolo con box shadow */
+th:first-child {
+    box-shadow: 2px 2px 2px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* Stile per la cella oggi - aumentata la specificità e priorità */
+td.today {
+    background-color: #ffff00 !important;
+    z-index: 2;
+}
+
+/* Anche quando è nella prima colonna */
+td.today:first-child {
+    background-color: #ffff00 !important;
+    z-index: 2;
+}
+
+/* Weekend e festivi */
+.weekend-row td {
+    background-color: #e8f5e9;
+}
+
+/* Prima colonna nei weekend - minore priorità del today */
+.weekend-row td:first-child {
+    background-color: #f5f5f5;
+}
+
+#goToToday {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 5;
+    padding: 8px 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+#goToToday:hover {
+    background-color: #45a049;
 }
