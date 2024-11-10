@@ -16,8 +16,14 @@ body {
     z-index: 100;
 }
 
+
+
 #calendar thead th {
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    position: sticky;
+    top: 0;
+    background-color: #fff; /* Facoltativo: previene la sovrapposizione del testo */
+    z-index: 1; /* Facoltativo: assicura che l'intestazione rimanga sopra le altre righe */
 }
 
 table {
@@ -58,11 +64,11 @@ td[contenteditable="true"]:not(:empty) {
 }
 
 #todayBtn {
-    position: sticky;
-    top: 0;
-    z-index: 101;
-    background-color: white;
+    position: fixed;
+    top: 10px;
+    left: 10px;
     padding: 8px 16px;
+    z-index: 1000;
 }
 
 .color-picker {
@@ -215,11 +221,4 @@ td:first-child {
     justify-content: center;
     align-items: center;
     height: 18px;         /* altezza ridotta a 18px */
-}
-
-#header-row {
-    position: sticky;
-    top: 0;
-    background-color: white; /* o il colore che preferisci */
-    z-index: 100;
 }
