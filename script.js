@@ -52,16 +52,27 @@ function showColorPicker(cell) {
     
     // Ottieni la posizione della cella
     const cellRect = cell.getBoundingClientRect();
-    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    const scrollTop = window.scrollY || document.documentElement.scrollTop;
     
-    // Posiziona il color picker 20px sopra la cella
-    colorPicker.style.position = 'absolute';
-    colorPicker.style.left = cellRect.left + 'px';
-    colorPicker.style.top = (cellRect.top + scrollTop - colorPicker.offsetHeight - 20) + 'px';
+    // Calcola la posizione ottimale per dispositivi mobili
+    const isMobile = window.innerWidth <= 768;
     
-    // Se il color picker andrebbe fuori dallo schermo in alto, posizionalo sotto la cella
-    if (cellRect.top - colorPicker.offsetHeight - 20 < 0) {
-        colorPicker.style.top = (cellRect.bottom + scrollTop + 20) + 'px';
+    if (isMobile) {
+        // Su mobile, posiziona il color picker al centro dello schermo
+        colorPicker.style.position = 'fixed';
+        colorPicker.style.left = '50%';
+        colorPicker.style.top = '50%';
+        colorPicker.style.transform = 'translate(-50%, -50%)';
+    } else {
+        // Su desktop, mantieni il comportamento esistente
+        colorPicker.style.position = 'absolute';
+        colorPicker.style.left = cellRect.left + 'px';
+        colorPicker.style.top = (cellRect.top + scrollTop - colorPicker.offsetHeight - 20) + 'px';
+        
+        // Se il color picker andrebbe fuori dallo schermo in alto, posizionalo sotto la cella
+        if (cellRect.top - colorPicker.offsetHeight - 20 < 0) {
+            colorPicker.style.top = (cellRect.bottom + scrollTop + 20) + 'px';
+        }
     }
     
     colorPicker.style.display = 'block';
@@ -76,7 +87,6 @@ function showColorPicker(cell) {
         selectedCell = null;
     }, 10000);
 }
-
 function scrollToToday() {
     const today = new Date();
     const formattedDate = formatDate(today);
