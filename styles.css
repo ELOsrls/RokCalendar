@@ -7,6 +7,8 @@ body {
     position: relative;
     max-height: 100vh;
     overflow-y: auto;
+    width: 100%;
+    overflow-x: hidden;
 }
 
 #calendar thead {
@@ -221,4 +223,23 @@ td:first-child {
     justify-content: center;
     align-items: center;
     height: 18px;         /* altezza ridotta a 18px */
+}
+
+#header-row {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: white;
+    z-index: 1000;
+    width: 100%;
+}
+
+#calendar-body {
+    padding-top: 50px; /* Aggiungi spazio per compensare l'header fixed */
+}
+
+#calendar {
+    width: 100%;
+    border-collapse: collapse;
 }
