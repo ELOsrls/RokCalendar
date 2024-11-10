@@ -158,16 +158,73 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('goToToday').addEventListener('click', scrollToToday);
 
     calendarBody.addEventListener('click', (e) => {
-        if (e.target.tagName === 'TD' && e.target.cellIndex > 0) {
+        if (e.target.tagName === 'TD') {
             const colorPicker = document.getElementById('colorPicker');
             const rect = e.target.getBoundingClientRect();
+            const cell = e.target;
+            
             colorPicker.style.display = 'block';
             colorPicker.style.top = `${rect.top - colorPicker.offsetHeight}px`;
             colorPicker.style.left = `${rect.left}px`;
-            colorPicker.dataset.targetCell = e.target.cellIndex;
-            colorPicker.dataset.targetRow = e.target.parentElement.rowIndex;
+            
+            // Salva il riferimento diretto alla cella invece che gli indici
+            colorPicker.dataset.targetCell = cell.cellIndex;
+            colorPicker.dataset.targetRow = Array.from(calendarBody.rows).indexOf(cell.parentElement);
         }
     });
+
+    // Funzione migliorata per il salvataggio nel database
+    function saveToDatabase(cell) {
+        if (!db) {
+            console.error('Database non inizializzato');
+            return;
+        }
+
+        const row = cell.parentElement;
+        const dateKey = row.firstChild.getAttribute('data-date');
+        const colIndex = Array.from(row.children).indexOf(cell);
+        
+        if (!dateKey || colIndex === 0) {
+            console.log('Cella non valida per il salvataggio');
+            return;
+        }
+        
+        const path = `calendar/${dateKey}/${colIndex}`;
+        const data = {
+            text: cell.textContent || '',
+            color: cell.style.backgroundColor || '',
+            timestamp: Date.now()
+        };
+
+        console.log('Salvataggio:', path, data);
+
+        db.ref(path).update(data)
+            .then(() => console.log('Salvato con successo:', path))
+            .catch(error => console.error('Errore nel salvataggio:', error));
+    }
+
+    // Gestione dell'input nelle celle con debounce ottimizzato
+    function initializeCellListeners() {
+        const calendarBody = document.getElementById('calendar-body');
+        let debounceTimer;
+
+        calendarBody.addEventListener('input', (e) => {
+            if (e.target.tagName === 'TD') {
+                const cell = e.target;
+                
+                // Cancella il timer precedente
+                clearTimeout(debounceTimer);
+                
+                // Imposta un nuovo timer
+                debounceTimer = setTimeout(() => {
+                    saveToDatabase(cell);
+                }, 300); // Ridotto a 300ms per una risposta più veloce
+            }
+        });
+    }
+
+    // Inizializzazione all'avvio
+    initializeCellListeners();
 
     // Funzione di salvataggio migliorata
     function saveToDatabase(cell) {
@@ -192,46 +249,59 @@ document.addEventListener('DOMContentLoaded', () => {
             timestamp: Date.now()
         };
 
-        console.log('Tentativo di salvataggio:', path, data);
+        console.log('Salvataggio:', path, data);
 
         db.ref(path).update(data)
-            .then(() => {
-                console.log('Salvato con successo:', path);
-            })
-            .catch(error => {
-                console.error('Errore nel salvataggio:', error);
-            });
+            .then(() => console.log('Salvato con successo:', path))
+            .catch(error => console.error('Errore nel salvataggio:', error));
     }
 
-    // Gestione dell'input nelle celle con debounce
-    let debounceTimer;
-    calendarBody.addEventListener('input', (e) => {
-        if (e.target.tagName === 'TD') {
-            console.log('Input rilevato in cella');
-            clearTimeout(debounceTimer);
-            debounceTimer = setTimeout(() => {
-                saveToDatabase(e.target);
-            }, 500);
-        }
-    });
+    // Gestione dell'input nelle celle con debounce ottimizzato
+    function initializeCellListeners() {
+        const calendarBody = document.getElementById('calendar-body');
+        let debounceTimer;
+
+        calendarBody.addEventListener('input', (e) => {
+            if (e.target.tagName === 'TD') {
+                const cell = e.target;
+                
+                // Cancella il timer precedente
+                clearTimeout(debounceTimer);
+                
+                // Imposta un nuovo timer
+                debounceTimer = setTimeout(() => {
+                    saveToDatabase(cell);
+                }, 300); // Ridotto a 300ms per una risposta più veloce
+            }
+        });
+    }
+
+    // Inizializzazione all'avvio
+    initializeCellListeners();
 
     // Gestione del color picker
     document.getElementById('colorPicker').addEventListener('click', (e) => {
         if (e.target.classList.contains('color-btn')) {
             const color = e.target.dataset.color;
-            const rowIndex = e.target.parentElement.dataset.targetRow;
-            const cellIndex = e.target.parentElement.dataset.targetCell;
-            const row = calendarBody.rows[rowIndex];
+            const rowIndex = parseInt(e.target.parentElement.dataset.targetRow);
+            const cellIndex = parseInt(e.target.parentElement.dataset.targetCell);
             
-            if (cellIndex == 0) {
-                Array.from(row.cells).forEach(cell => {
-                    cell.style.backgroundColor = color;
-                    saveToDatabase(cell);
-                });
-            } else {
-                const cell = row.cells[cellIndex];
-                cell.style.backgroundColor = color;
-                saveToDatabase(cell);
+            // Usa il riferimento diretto alla riga corretta
+            const row = calendarBody.rows[rowIndex];
+            if (row) {
+                if (cellIndex === 0) {
+                    // Se è la cella data, colora tutta la riga
+                    Array.from(row.cells).forEach(cell => {
+                        cell.style.backgroundColor = color;
+                        saveToDatabase(cell);
+                    });
+                } else {
+                    const cell = row.cells[cellIndex];
+                    if (cell) {
+                        cell.style.backgroundColor = color;
+                        saveToDatabase(cell);
+                    }
+                }
             }
 
             e.target.parentElement.style.display = 'none';
@@ -276,4 +346,38 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Carica i dati iniziali
     loadFromDatabase();
+
+    // Funzione per inizializzare i listener di Firebase
+    function initializeRealtimeListeners() {
+        // Listener per l'intero calendario
+        db.ref('calendar').on('value', (snapshot) => {
+            console.log('Ricevuto aggiornamento dal database');
+            const data = snapshot.val() || {};
+            updateCalendarFromDatabase(data);
+        });
+    }
+
+    // Funzione per aggiornare il calendario dai dati del database
+    function updateCalendarFromDatabase(data) {
+        Object.entries(data).forEach(([dateKey, dateData]) => {
+            const row = document.querySelector(`td[data-date="${dateKey}"]`)?.parentElement;
+            if (!row) return;
+
+            Object.entries(dateData).forEach(([colIndex, cellData]) => {
+                const cell = row.children[colIndex];
+                if (!cell) return;
+
+                // Aggiorna solo se il contenuto è diverso
+                if (cellData.text && cell.textContent !== cellData.text) {
+                    cell.textContent = cellData.text;
+                }
+                if (cellData.color) {
+                    cell.style.backgroundColor = cellData.color;
+                }
+            });
+        });
+    }
+
+    // Inizializzazione all'avvio
+    initializeRealtimeListeners();
 });

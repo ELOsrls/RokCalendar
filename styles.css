@@ -69,12 +69,13 @@ td:first-child, th:first-child {
 
 .color-picker {
     display: none;
-    position: absolute;
+    position: fixed;
     background: white;
     border: 1px solid #ddd;
     padding: 5px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
     z-index: 1000;
+    border-radius: 4px;
 }
 
 .color-btn {
@@ -83,10 +84,12 @@ td:first-child, th:first-child {
     margin: 2px;
     border: 1px solid #999;
     cursor: pointer;
+    border-radius: 2px;
 }
 
 .color-btn:hover {
     border-color: #333;
+    transform: scale(1.1);
 }
 
 .weekend-row td {
