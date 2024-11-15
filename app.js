@@ -405,16 +405,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Funzione per impostare le dimensioni dei pulsanti del color picker
     function adjustColorPickerButtons() {
         const colorButtons = document.querySelectorAll('.color-btn'); // Seleziona tutti i pulsanti
-        const isMobile = window.innerWidth <= 768; // Rileva se il client è su uno smartphone
 
         colorButtons.forEach(button => {
-            if (isMobile) {
-                button.style.width = '100px'; // Imposta la larghezza a 100px (doppio rispetto a un valore standard)
-                button.style.height = '100px'; // Imposta l'altezza a 100px (doppio rispetto a un valore standard)
-            } else {
-                button.style.width = ''; // Ripristina la larghezza predefinita
-                button.style.height = ''; // Ripristina l'altezza predefinita
-            }
+            button.style.width = '100px'; // Imposta la larghezza a 100px
+            button.style.height = '100px'; // Imposta l'altezza a 100px
         });
     }
 
