@@ -215,15 +215,20 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     calendarBody.addEventListener('click', (e) => {
         if (e.target.tagName === 'TD') {
-            const colorPicker = document.getElementById('colorPicker');
-            const rect = e.target.getBoundingClientRect();
             const cell = e.target;
             
+            // Aggiungi un messaggio alla console quando si seleziona una cella
+            console.log('Cella selezionata:', cell.getAttribute('data-date'), 'Colonna:', cell.cellIndex);
+            
+            const colorPicker = document.getElementById('colorPicker');
+            const rect = cell.getBoundingClientRect();
+            
             colorPicker.style.display = 'block';
-            colorPicker.style.top = `${rect.top - colorPicker.offsetHeight}px`;
+            colorPicker.style.top = `${rect.top - colorPicker.offsetHeight - 50}px`;
+            
             colorPicker.style.left = `${rect.left}px`;
             
-            // Salva il riferimento diretto alla cella invece che gli indici
+            // Salva il riferimento diretto alla cella invece che agli indici
             colorPicker.dataset.targetCell = cell.cellIndex;
             colorPicker.dataset.targetRow = Array.from(calendarBody.rows).indexOf(cell.parentElement);
         }
@@ -391,14 +396,21 @@ document.addEventListener('DOMContentLoaded', async () => {
     initializeRealtimeListeners();
     scrollToToday();
 
-    // Funzione per impostare le dimensioni dei pulsanti del color picker
+    // Funzione per impostare le dimensioni e la posizione dei pulsanti del color picker
     function adjustColorPickerButtons() {
         const colorButtons = document.querySelectorAll('.color-btn'); // Seleziona tutti i pulsanti
 
         colorButtons.forEach(button => {
-            button.style.width = '100px'; // Imposta la larghezza a 100px
-            button.style.height = '100px'; // Imposta l'altezza a 100px
+            button.style.width = '80px'; // Imposta la larghezza a 50px
+            button.style.height = '80px'; // Imposta l'altezza a 50px
         });
+
+        // Sposta la posizione del color picker di 50px in alto
+        const colorPicker = document.getElementById('colorPicker');
+        if (colorPicker) {
+            colorPicker.style.top = `${parseInt(colorPicker.style.top || 0) - 500}px`; // Sposta verso l'alto
+            console.log(`${parseInt(colorPicker.style.top || 0) - 500}px`);
+        }
     }
 
     // Chiama la funzione per regolare le dimensioni dei pulsanti
