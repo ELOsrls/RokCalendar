@@ -15,7 +15,7 @@ table {
 }
 
 th, td {
-    border: 1px solid #ddd;
+    border: 5px solid #000;
     padding: 5px;
     width: calc(15ch + 10px);
     min-height: 15px;
