@@ -1,15 +1,21 @@
-// Firebase configuration
+/******************************************************************************
+ * CONFIGURAZIONE FIREBASE
+ *****************************************************************************/
+
+// Credenziali di accesso al progetto Firebase
+// Queste informazioni sono necessarie per connettersi al database remoto
 const firebaseConfig = {
     apiKey: "AIzaSyAGdQa0SdgpjnfYGOKq6Iuzan_IUmquY3Q",
     authDomain: "rokcalendar-502a7.firebaseapp.com",
-    databaseURL: "https://rokcalendar-502a7-default-rtdb.europe-west1.firebasedatabase.app/",
+    databaseURL: " https://rokcalendar-17104-default-rtdb.europe-west1.firebasedatabase.app",
     projectId: "rokcalendar-502a7",
     storageBucket: "rokcalendar-502a7.firebasestorage.app",
     messagingSenderId: "232572972605",
     appId: "1:232572972605:web:606cb95729e96523914454"
 };
 
-// Initialize Firebase
+// Inizializzazione della connessione a Firebase
+// Se l'inizializzazione fallisce, viene mostrato un errore in console
 let db;
 try {
     firebase.initializeApp(firebaseConfig);
@@ -19,24 +25,83 @@ try {
     console.error('Errore inizializzazione Firebase:', error);
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    const collaborators = ["Generale", "Andrea", "Silvia", "Paolo", "Gianluca Papa", "Guido", "Marco", "Maurizio", "Niah", "Maurizio Bordiani", "Bellantonio", "Anna G"];
+/******************************************************************************
+ * INIZIALIZZAZIONE APPLICAZIONE
+ *****************************************************************************/
+
+document.addEventListener('DOMContentLoaded', async () => {
     
-    // Funzione per formattare la data in YYYY-MM-DD
+    /**************************************************************************
+     * CONFIGURAZIONE INIZIALE E COSTANTI
+     **************************************************************************/
+    
+    let collaborators = [];
+
+    // Funzione per caricare i collaboratori dal config.ini
+    async function loadCollaborators() {
+        try {
+            const response = await fetch('config.ini');
+            const data = await response.text();
+            console.log('Contenuto config.ini:', data);
+            
+            const lines = data.split('\n')
+                .map(line => line.trim())
+                .filter(line => line && !line.startsWith(';'));
+            
+            const namesLine = lines.find(line => line.startsWith('names='));
+            if (namesLine) {
+                collaborators = [
+                    
+                    ...namesLine
+                        .substring('names='.length)
+                        .split(',')
+                        .map(name => name.trim())
+                        .filter(name => name)
+                ];
+                console.log('Lista collaboratori caricata:', collaborators);
+            } else {
+                throw new Error('Nessuna linea names= trovata nel file config.ini');
+            }
+        } catch (error) {
+            console.error('Errore nel caricamento dei collaboratori:', error);
+            collaborators = [
+                "Generale",    // Colonna per eventi generali
+                "Andrea",      // Collaboratori individuali
+                "Silvia", 
+                "Paolo"
+            ];
+        }
+    }
+
+    // Carica prima i collaboratori
+    await loadCollaborators();
+    console.log('Collaboratori caricati, procedo con la creazione del calendario');
+
+    // Periodo temporale del calendario
+    const startDate = new Date(2024, 0, 1);   // Inizio: 1 gennaio 2024
+    const endDate = new Date(2026, 11, 31);   // Fine: 31 dicembre 2026
+    const today = formatDate(new Date());      // Data odierna formattata
+
+    /**************************************************************************
+     * FUNZIONI DI UTILITÀ
+     **************************************************************************/
+    
+    // Converte una data in formato stringa YYYY-MM-DD
+    // Input: oggetto Date
+    // Output: esempio "2024-01-01"
     function formatDate(date) {
         return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
     }
 
-    // Funzione per ottenere il nome del giorno in italiano
+    // Restituisce l'abbreviazione del giorno della settimana in italiano
+    // Input: oggetto Date
+    // Output: "Lun", "Mar", ecc.
     function getDayName(date) {
         const days = ['Dom', 'Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab'];
         return days[date.getDay()];
     }
 
-    const startDate = new Date(2024, 0, 1); // 1 gennaio 2024
-    const endDate = new Date(2026, 11, 31); // 31 dicembre 2026
-    const today = formatDate(new Date());
-
+    
     // Lista delle festività italiane 2024-2026
     const holidays = [
         // 2024
@@ -174,7 +239,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Funzione migliorata per il salvataggio nel database
+    // Funzione per salvare i dati nel database
     function saveToDatabase(cell) {
         if (!db) {
             console.error('Database non inizializzato');
@@ -193,60 +258,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const path = `calendar/${dateKey}/${colIndex}`;
         const data = {
             text: cell.textContent || '',
-            color: cell.style.backgroundColor || '',
-            timestamp: Date.now()
-        };
-
-        console.log('Salvataggio:', path, data);
-
-        db.ref(path).update(data)
-            .then(() => console.log('Salvato con successo:', path))
-            .catch(error => console.error('Errore nel salvataggio:', error));
-    }
-
-    // Gestione dell'input nelle celle con debounce ottimizzato
-    function initializeCellListeners() {
-        const calendarBody = document.getElementById('calendar-body');
-        let debounceTimer;
-
-        calendarBody.addEventListener('input', (e) => {
-            if (e.target.tagName === 'TD') {
-                const cell = e.target;
-                
-                // Cancella il timer precedente
-                clearTimeout(debounceTimer);
-                
-                // Imposta un nuovo timer
-                debounceTimer = setTimeout(() => {
-                    saveToDatabase(cell);
-                }, 300); // Ridotto a 300ms per una risposta più veloce
-            }
-        });
-    }
-
-    // Inizializzazione all'avvio
-    initializeCellListeners();
-
-    // Funzione di salvataggio migliorata
-    function saveToDatabase(cell) {
-        if (!db) {
-            console.error('Database non inizializzato');
-            return;
-        }
-
-        const row = cell.parentElement;
-        const dateKey = row.firstChild.getAttribute('data-date');
-        const colIndex = Array.from(row.children).indexOf(cell);
-        
-        if (!dateKey || colIndex === 0) {
-            console.log('Cella non valida per il salvataggio');
-            return;
-        }
-        
-        const path = `calendar/${dateKey}/${colIndex}`;
-        const data = {
-            text: cell.textContent || '',
-            color: cell.style.backgroundColor || '',
+            backgroundColor: cell.style.backgroundColor || '',
+            html: cell.innerHTML || '',  // Salva l'HTML per mantenere la formattazione del testo colorato
             timestamp: Date.now()
         };
 
@@ -282,31 +295,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Gestione del color picker
     document.getElementById('colorPicker').addEventListener('click', (e) => {
-        if (e.target.classList.contains('color-btn')) {
-            const color = e.target.dataset.color;
-            const rowIndex = parseInt(e.target.parentElement.dataset.targetRow);
-            const cellIndex = parseInt(e.target.parentElement.dataset.targetCell);
-            
-            // Usa il riferimento diretto alla riga corretta
-            const row = calendarBody.rows[rowIndex];
-            if (row) {
-                if (cellIndex === 0) {
-                    // Se è la cella data, colora tutta la riga
-                    Array.from(row.cells).forEach(cell => {
-                        cell.style.backgroundColor = color;
-                        saveToDatabase(cell);
-                    });
-                } else {
-                    const cell = row.cells[cellIndex];
-                    if (cell) {
-                        cell.style.backgroundColor = color;
-                        saveToDatabase(cell);
-                    }
-                }
-            }
+        if (!e.target.classList.contains('color-btn')) return;
+        
+        const color = e.target.dataset.color;
+        const selection = window.getSelection();
+        const colorPicker = document.getElementById('colorPicker');
+        
+        const targetRow = colorPicker.dataset.targetRow;
+        const targetCell = colorPicker.dataset.targetCell;
+        
+        if (targetRow === undefined || targetCell === undefined) return;
+        
+        const cell = document.getElementById('calendar-body').rows[targetRow].cells[targetCell];
+        if (!cell) return;
 
-            e.target.parentElement.style.display = 'none';
+        if (!selection.isCollapsed && cell.contains(selection.anchorNode)) {
+            const range = selection.getRangeAt(0);
+            const span = document.createElement('span');
+            span.style.backgroundColor = color;
+            range.surroundContents(span);
+        } else {
+            cell.style.backgroundColor = color;
         }
+        
+        saveToDatabase(cell);
+        colorPicker.style.display = 'none';
     });
 
     // Test iniziale della connessione al database
@@ -318,7 +331,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Caricamento dati iniziale
+    // Funzione per caricare i dati dal database
     function loadFromDatabase() {
         console.log('Inizio caricamento dati');
         db.ref('calendar').once('value')
@@ -334,8 +347,17 @@ document.addEventListener('DOMContentLoaded', () => {
                         const cell = row.children[colIndex];
                         if (!cell) return;
 
-                        if (cellData.text) cell.textContent = cellData.text;
-                        if (cellData.color) cell.style.backgroundColor = cellData.color;
+                        // Ripristina sia il testo che la formattazione
+                        if (cellData.html) {
+                            cell.innerHTML = cellData.html;  // Ripristina il testo colorato
+                        } else {
+                            cell.textContent = cellData.text || '';
+                        }
+                        
+                        // Ripristina il colore di sfondo
+                        if (cellData.backgroundColor) {
+                            cell.style.backgroundColor = cellData.backgroundColor;
+                        }
                     });
                 });
                 console.log('Caricamento dati completato');
@@ -360,20 +382,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Funzione per aggiornare il calendario dai dati del database
     function updateCalendarFromDatabase(data) {
-        Object.entries(data).forEach(([dateKey, dateData]) => {
-            const row = document.querySelector(`td[data-date="${dateKey}"]`)?.parentElement;
-            if (!row) return;
-
-            Object.entries(dateData).forEach(([colIndex, cellData]) => {
-                const cell = row.children[colIndex];
-                if (!cell) return;
-
-                // Aggiorna solo se il contenuto è diverso
-                if (cellData.text && cell.textContent !== cellData.text) {
-                    cell.textContent = cellData.text;
-                }
-                if (cellData.color) {
-                    cell.style.backgroundColor = cellData.color;
+        Object.entries(data).forEach(([date, columns]) => {
+            Object.entries(columns).forEach(([column, cellData]) => {
+                const cell = document.querySelector(`td[data-date="${date}"][data-column="${column}"]`);
+                if (cell) {
+                    if (cellData.html) {
+                        cell.innerHTML = cellData.html;  // Ripristina l'HTML salvato
+                    } else {
+                        cell.textContent = cellData.text || '';
+                    }
+                    cell.style.backgroundColor = cellData.color || '';
                 }
             });
         });
