@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Calendario Condiviso</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <button id="goToToday">Vai a Oggi</button>
+    <div class="calendar-container">
+        <table id="calendar">
+            <thead>
+                <tr id="header-row"></tr>
+            </thead>
+            <tbody id="calendar-body"></tbody>
+        </table>
+    </div>
+    <div class="color-picker" id="colorPicker">
+        <button class="color-btn" data-color="#FFFFFF" style="background-color: #FFFFFF"></button>
+        <button class="color-btn" data-color="#D2B48C" style="background-color: #D2B48C"></button>
+        <button class="color-btn" data-color="#FFB6B6" style="background-color: #FFB6B6"></button>
+        <button class="color-btn" data-color="#B6B6FF" style="background-color: #B6B6FF"></button>
+    </div>
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+    
+    <!-- Applicazione -->
+    <script src="app.js"></script>
+</body>
+</html>
