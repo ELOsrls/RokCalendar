@@ -225,6 +225,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             
             colorPicker.style.display = 'block';
             colorPicker.style.top = `${rect.top - colorPicker.offsetHeight - 50}px`;
+            console.log(`${parseInt(colorPicker.style.top || 0)}px`);
             
             colorPicker.style.left = `${rect.left}px`;
             
@@ -408,8 +409,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Sposta la posizione del color picker di 50px in alto
         const colorPicker = document.getElementById('colorPicker');
         if (colorPicker) {
-            colorPicker.style.top = `${parseInt(colorPicker.style.top || 0) - 500}px`; // Sposta verso l'alto
-            console.log(`${parseInt(colorPicker.style.top || 0) - 500}px`);
+            colorPicker.style.top = `${parseInt(colorPicker.style.top || 0) - 50}px`; // Sposta verso l'alto
+            console.log(`${parseInt(colorPicker.style.top || 0)}px`);
         }
     }
 
