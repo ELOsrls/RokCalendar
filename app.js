@@ -37,39 +37,28 @@ document.addEventListener('DOMContentLoaded', async () => {
     
     let collaborators = [];
 
-    // Funzione per caricare i collaboratori dal config.ini
+    // Funzione per caricare i collaboratori direttamente dal codice
     async function loadCollaborators() {
         try {
-            const response = await fetch('config.ini');
-            const data = await response.text();
-            console.log('Contenuto config.ini:', data);
-            
-            const lines = data.split('\n')
-                .map(line => line.trim())
-                .filter(line => line && !line.startsWith(';'));
-            
-            const namesLine = lines.find(line => line.startsWith('names='));
-            if (namesLine) {
-                collaborators = [
-                    
-                    ...namesLine
-                        .substring('names='.length)
-                        .split(',')
-                        .map(name => name.trim())
-                        .filter(name => name)
-                ];
-                console.log('Lista collaboratori caricata:', collaborators);
-            } else {
-                throw new Error('Nessuna linea names= trovata nel file config.ini');
-            }
+            // Definisci i collaboratori direttamente nel codice
+            collaborators = [
+                "Generale",
+                "Andrea",
+                "Salva",
+                "Paolo",
+                "Gianluca Papa",
+                "Guido",
+                "Marco",
+                "Maurizio",
+                "Ishia",
+                "Maurizio Budassi",
+                "Bellantuono",
+                "Anna G"
+            ];
+            console.log('Lista collaboratori caricata:', collaborators);
         } catch (error) {
             console.error('Errore nel caricamento dei collaboratori:', error);
-            collaborators = [
-                "Generale",    // Colonna per eventi generali
-                "Andrea",      // Collaboratori individuali
-                "Silvia", 
-                "Paolo"
-            ];
+            collaborators = []; // Imposta un array vuoto in caso di errore
         }
     }
 
