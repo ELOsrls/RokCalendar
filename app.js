@@ -29,6 +29,13 @@ try {
  * INIZIALIZZAZIONE APPLICAZIONE
  *****************************************************************************/
 
+window.onload = function() {
+    const currentUrl = window.location.href;
+    const newUrl = currentUrl.split('?')[0] + '?t=' + new Date().getTime();
+    window.history.replaceState(null, '', newUrl);
+};
+
+
 document.addEventListener('DOMContentLoaded', async () => {
     
     /**************************************************************************
