@@ -1,32 +1,784 @@
+<!-- 
+ ######################################################### 
+ MODULO INTERVENTO ON LINE
+ #########################################################
+ -->
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <title>Calendario Condiviso</title>
-    <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8"> <!-- Imposta la codifica dei caratteri a UTF-8 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Rende il layout responsivo -->
+    <title>Modulo Intervento</title> <!-- Titolo della pagina -->
+    <style>
+        /* Stili generali per il corpo della pagina */
+        body {
+            background-color: #FFFACD; /* Colore di sfondo giallo pastello */
+            font-family: Arial, sans-serif; /* Font utilizzato per il testo */
+            margin: 0; /* Rimuove il margine predefinito */
+            padding: 2rem; /* Padding interno per il corpo */
+        }
+        /* Stili per l'intestazione */
+        .header {
+            text-align: center; /* Allinea il contenuto al centro */
+            margin-bottom: 0px; /* Margine inferiore per l'intestazione */
+        }
+        /* Stili per il logo */
+        .logo {
+            width: 100%; /* Logo a tutta larghezza */
+            height: auto; /* Mantiene le proporzioni del logo */
+            max-width: 850px; /* Rimuove la larghezza massima per il logo */
+        }
+        /* Stili per il contenuto principale */
+        .content {
+            border: 1px solid #000; /* Bordo nero attorno al contenuto */
+            padding: 2rem; /* Padding interno per il contenuto */
+            background-color: white; /* Colore di sfondo bianco per il contenuto */
+            width: 90%; /* Larghezza del contenuto */
+            max-width: 800px; /* Larghezza massima per il contenuto */
+            margin: auto; /* Centra il contenuto nella pagina */
+        }
+        /* Stili per le caselle informative */
+        .info-box {
+            border: 1px solid #000; /* Bordo per la cornice */
+            padding: 1px; /* Spazio interno */
+            margin-bottom: 20px; /* Spazio sotto la cornice */
+        }
+        /* Stili per la tabella di lavoro */
+        .work-table {
+            border: 1px solid #000; /* Bordo per la cornice della tabella */
+            width: 100%; /* Larghezza della tabella */
+            border-collapse: collapse; /* Unisce i bordi delle celle */
+            margin-top: 20px; /* Spazio sopra la tabella */
+        }
+        /* Stili per le celle della tabella */
+        .work-table th, .work-table td {
+            border: 1px solid #000; /* Bordo per celle */
+            padding: 8px; /* Spazio interno nelle celle */
+            text-align: left; /* Allinea il testo a sinistra */
+        }
+        /* Stili per l'intestazione della tabella */
+        .work-table th {
+            background-color: #f2f2f2; /* Colore di sfondo per l'intestazione */
+        }
+        /* Stili per il gruppo di checkbox */
+        .checkbox-group {
+            border: 1px solid #000; /* Bordo per la cornice dei checkbox */
+            padding: 10px; /* Spazio interno */
+            margin-top: 20px; /* Spazio sopra la cornice */
+        }
+        /* Stili per il titolo del gruppo di checkbox */
+        .checkbox-title {
+            font-weight: bold; /* Grassetto per il titolo */
+            margin-bottom: 10px; /* Spazio sotto il titolo */
+        }
+        /* Stili per le etichette dei checkbox */
+        .checkbox-label {
+            display: flex; /* Layout flessibile per allineare checkbox e input */
+            align-items: center; /* Allinea verticalmente al centro */
+            margin-bottom: 5px; /* Spazio sotto ogni checkbox */
+        }
+        /* Stili per la parte sinistra delle etichette dei checkbox */
+        .checkbox-label-left {
+            justify-content: flex-start; /* Allinea a sinistra */
+            width: 50%; /* Larghezza per la parte sinistra */
+        }
+        /* Stili per la parte destra delle etichette dei checkbox */
+        .checkbox-label-right {
+            justify-content: flex-end; /* Allinea a destra */
+            width: 50%; /* Larghezza per la parte destra */
+            display: flex; /* Layout flessibile per allineare elementi */
+            align-items: center; /* Allinea verticalmente al centro */
+        }
+        /* Stili per i campi di input */
+        .field {
+            display: flex; /* Layout flessibile per allineare etichette e input */
+            align-items: center; /* Allinea verticalmente al centro */
+            margin-bottom: 5px; /* Spazio sotto ogni campo */
+            padding-top: 5px; /* Spazio sopra ogni campo */
+            justify-content: flex-start; /* Allinea i campi a sinistra */
+        }
+        /* Stili per le etichette dei campi */
+        .field label {
+            width: 30%; /* Larghezza fissa per le etichette */
+        }
+        /* Stili per i campi di input */
+        .field input {
+            width: 65%; /* Larghezza per i campi di input */
+        }
+        /* Stili per il campo data */
+        .field input[type="date"] {
+            width: 15ch; /* Larghezza per il campo data */
+        }
+        /* Stili per il campo Offerta N° */
+        .offer-input {
+            width: 50px; /* Larghezza per il campo Offerta N° */
+            margin: 0 10px; /* Spazio orizzontale tra gli elementi */
+        }
+        /* Stili per il campo Del */
+        .del-input {
+            margin-left: 10px; /* Spazio a sinistra per il campo Del */
+        }
+        /* Stili per le note */
+        .note {
+            margin-top: 20px; /* Spazio sopra la nota */
+            font-style: italic; /* Stile corsivo per la nota */
+            color: #555; /* Colore grigio per la nota */
+        }
+        /* Stili per la linea di separazione */
+        .separator {
+            border-top: 1px solid #ccc; /* Linea di separazione */
+            margin: 5px 0; /* Spazio sopra e sotto la linea */
+        }
+        /* Aggiunto per impostare il colore di sfondo dei canvas */
+        .canvas-container canvas {
+            background-color: #d0cdff97; /* Colore giallo pastello */
+            border: 3px solid #2a11cb; /* Bordo nero per il canvas */
+        }
+        /* Media queries per schermi più piccoli */
+        @media (max-width: 600px) {
+            .field label {
+                width: 40%; /* Aumenta la larghezza delle etichette su schermi piccoli */
+            }
+
+            .field input {
+                width: 55%; /* Riduce la larghezza dei campi di input su schermi piccoli */
+            }
+
+            body {
+                padding: 1rem; /* Riduce il padding per schermi piccoli */
+            }
+
+            .content {
+                padding: 1rem; /* Riduce il padding per il contenuto su schermi piccoli */
+            }
+        }
+    </style>
 </head>
 <body>
-    <button id="goToToday">Vai a Oggi</button>
-    <div class="calendar-container">
-        <table id="calendar">
-            <thead>
-                <tr id="header-row"></tr>
-            </thead>
-            <tbody id="calendar-body"></tbody>
-        </table>
+    <div class="header">
+        <img src="rokepo-logo.jpg" alt="Logo Rokepo" class="logo"> <!-- Logo dell'azienda -->
+        <!-- <h1>Modulo Intervento</h1> --> <!-- Titolo principale (commentato) -->
     </div>
-    <div class="color-picker" id="colorPicker">
-        <button class="color-btn" data-color="#FFFFFF" style="background-color: #FFFFFF"></button>
-        <button class="color-btn" data-color="#D2B48C" style="background-color: #D2B48C"></button>
-        <button class="color-btn" data-color="#FFB6B6" style="background-color: #FFB6B6"></button>
-        <button class="color-btn" data-color="#B6B6FF" style="background-color: #B6B6FF"></button>
-    </div>
+    <div class="content">
+        <div class="info-box">
+            <div class="field">
+                <label for="operatore" style="margin-left: 10px;">Operatore:</label> <!-- Etichetta per il campo Operatore -->
+                <input type="text" id="operatore" list="operatori" style="width: calc(100% - 200px); margin-right: 10px;" onfocus="startDictation(this)"> <!-- Campo di input per l'operatore con larghezza ridotta -->
+                <datalist id="operatori"> <!-- Datalist per suggerimenti -->
+                    <option value="Maurizio Rispoli">
+                    <option value="Marco Cumani">
+                    <option value="Isiah Lewis">
+                    <option value="Gianluca Papa">
+                    <option value="Paolo Bonazzi">
+                </datalist>
+               
+                    <label for="data-intervento" style=" margin-left: 20px; white-space: nowrap;">Data intervento:</label> <!-- Etichetta per il campo Data intervento -->
+                    <input type="date" id="data-intervento" style="margin-right: 10px;"> <!-- Campo di input per la data dell'intervento -->
 
-    <!-- Firebase -->
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+            </div>
+            <div class="field">
+                <label for="cliente" style="margin-left: 10px;">Cliente:</label> <!-- Etichetta per il campo Cliente -->
+                <input type="text" id="cliente" style="width: calc(100% - 200px); margin-right: 10px;" onfocus="startDictation(this)"> <!-- Campo di input per il cliente con supporto per la dettatura -->
+            </div>
+            <div class="field">
+                <label for="sede" style="margin-left: 10px;">Sede/impianto:</label> <!-- Etichetta per il campo Sede -->
+                <input type="text" id="sede" style="width: calc(100% - 200px); margin-right: 10px;" onfocus="startDictation(this)"> <!-- Campo di input per la sede con supporto per la dettatura -->
+            </div>
+        </div>
+        <div class="checkbox-group">
+            <div class="checkbox-title">Motivo dell'intervento presso il cliente:</div> <!-- Titolo per il gruppo di checkbox -->
+            <div class="checkbox-label">
+                <div class="checkbox-label-left">
+                    <label>
+                        <input type="checkbox" name="reason" value="sopralluogo" id="chek_sopralluogo"> Sopralluogo <!-- Checkbox per il motivo Sopralluogo -->
+                    </label>
+                </div>
+                <div class="checkbox-label-right">
+                    <label>Offerta N°</label> <!-- Etichetta per il campo Offerta N° -->
+                    <input type="text" class="offer-input" maxlength="3" onfocus="startDictation(this)"> <!-- Campo di input per Offerta N° con supporto per la dettatura -->
+                    <label>Del</label> <!-- Etichetta per il campo Del -->
+                    <input type="date" class="del-input"> <!-- Campo di input per la data Del -->
+                </div>
+            </div>
+            <div class="separator"></div> <!-- Linea di separazione -->
+            <div class="checkbox-label">
+                <div class="checkbox-label-left">
+                    <label>
+                        <input type="checkbox" name="reason" value="installazione"> Installazione <!-- Checkbox per il motivo Installazione -->
+                    </label>
+                </div>
+                <div class="checkbox-label-right">
+                    <label>Contratto N°</label> <!-- Etichetta per il campo Contratto N° -->
+                    <input type="text" class="offer-input" maxlength="3" onfocus="startDictation(this)"> <!-- Campo di input per Contratto N° con supporto per la dettatura -->
+                    <label>Del</label> <!-- Etichetta per il campo Del -->
+                    <input type="date" class="del-input"> <!-- Campo di input per la data Del -->
+                </div>
+            </div>
+            <div class="separator"></div> <!-- Linea di separazione -->
+            <div class="checkbox-label">
+                <div class="checkbox-label-left">
+                    <label>
+                        <input type="checkbox" name="reason" value="assistenza"> Assistenza <!-- Checkbox per il motivo Assistenza -->
+                    </label>
+                </div>
+                <div class="checkbox-label-right">
+                    <label>Offerta N°</label> <!-- Etichetta per il campo Offerta N° -->
+                    <input type="text" class="offer-input" maxlength="3" onfocus="startDictation(this)"> <!-- Campo di input per Offerta N° con supporto per la dettatura -->
+                    <label>Del</label> <!-- Etichetta per il campo Del -->
+                    <input type="date" class="del-input"> <!-- Campo di input per la data Del -->
+                </div>
+            </div>
+            <div class="separator"></div> <!-- Linea di separazione -->
+            <div class="checkbox-label">
+                <div class="checkbox-label-left">
+                    <label>
+                        <input type="checkbox" name="reason" value="manutenzione"> Assistenza/Manutenzione Programmata <!-- Checkbox per il motivo Manutenzione -->
+                    </label>
+                </div>
+                <div class="checkbox-label-right">
+                    <label>Contratto N°</label> <!-- Etichetta per il campo Contratto N° -->
+                    <input type="text" class="offer-input" maxlength="3" onfocus="startDictation(this)"> <!-- Campo di input per Contratto N° con supporto per la dettatura -->
+                    <label>Del</label> <!-- Etichetta per il campo Del -->
+                    <input type="date" class="del-input"> <!-- Campo di input per la data Del -->
+                </div>
+            </div>
+            <div class="separator"></div> <!-- Linea di separazione -->
+            <div class="checkbox-label">
+                <div class="checkbox-label-left">
+                    <label>
+                        <input type="checkbox" name="reason" value="garanzia"> Assistenza in GARANZIA <!-- Checkbox per il motivo Garanzia -->
+                    </label>
+                </div>
+                <div class="checkbox-label-right">
+                    <label>Contratto N°</label> <!-- Etichetta per il campo Contratto N° -->
+                    <input type="text" class="offer-input" maxlength="3" onfocus="startDictation(this)"> <!-- Campo di input per Contratto N° con supporto per la dettatura -->
+                    <label>Del</label> <!-- Etichetta per il campo Del -->
+                    <input type="date" class="del-input"> <!-- Campo di input per la data Del -->
+                </div>
+            </div>
+        </div>
+        <div class="note">
+            N.B. Nel momento in cui è stato scelto il campo assistenza, il presente modulo viene utilizzato dal personale amministrativo della ROKEPO per procedere all'attività di fatturazione. <!-- Nota informativa -->
+        </div>
+        <div class="work-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 50%;">Descrizione Lavori Eseguiti</th> <!-- Prima colonna massimizzata per la descrizione dei lavori -->
+                        <th style="width: 10%;">Ora Inizio</th> <!-- Colonna ridotta per l'ora di inizio -->
+                        <th style="width: 10%;">Ora Fine</th> <!-- Colonna ridotta per l'ora di fine -->
+                        <th style="width: 10%;">Totale Ore Lavorate</th> <!-- Colonna per il totale delle ore lavorate -->
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <input type="text" placeholder="Descrizione lavoro 1" list="articoli1" style="width: 100%;" onfocus="startDictation(this)">
+                            <datalist id="articoli1"></datalist> <!-- Datalist vuoto -->
+                        </td>
+                        <td><input type="time" class="start-time" style="width: 100%;" onchange="calculateTotal(this)"></td>
+                        <td><input type="time" class="end-time" style="width: 100%;" onchange="calculateTotal(this)"></td>
+                        <td><input type="text" placeholder="Ore" class="total-hours" style="width: 100%;" disabled></td>
+                    </tr>
+                    <!-- Ripetere per ulteriori lavori -->
+                    <tr>
+                        <td><input type="text" placeholder="Descrizione lavoro 2" style="width: 100%;" onfocus="startDictation(this)"></td>
+                        <td><input type="time" class="start-time" style="width: 100%;" onchange="calculateTotal(this)"></td>
+                        <td><input type="time" class="end-time" style="width: 100%;" onchange="calculateTotal(this)"></td>
+                        <td><input type="text" placeholder="Ore" class="total-hours" style="width: 100%;" disabled></td> <!-- Nuovo campo per totale ore lavorate -->
+                    </tr>
+                    <tr>
+                        <td><input type="text" placeholder="Descrizione lavoro 3" style="width: 100%;" onfocus="startDictation(this)"></td>
+                        <td><input type="time" class="start-time" style="width: 100%;" onchange="calculateTotal(this)"></td>
+                        <td><input type="time" class="end-time" style="width: 100%;" onchange="calculateTotal(this)"></td>
+                        <td><input type="text" placeholder="Ore" class="total-hours" style="width: 100%;" disabled></td> <!-- Nuovo campo per totale ore lavorate -->
+                    </tr>
+                    <tr>
+                        <td><input type="text" placeholder="Descrizione lavoro 4" style="width: 100%;" onfocus="startDictation(this)"></td>
+                        <td><input type="time" class="start-time" style="width: 100%;" onchange="calculateTotal(this)"></td>
+                        <td><input type="time" class="end-time" style="width: 100%;" onchange="calculateTotal(this)"></td>
+                        <td><input type="text" placeholder="Ore" class="total-hours" style="width: 100%;" disabled></td> <!-- Nuovo campo per totale ore lavorate -->
+                    </tr>
+                    <tr>
+                        <td><input type="text" placeholder="Descrizione lavoro 5" style="width: 100%;" onfocus="startDictation(this)"></td>
+                        <td><input type="time" class="start-time" style="width: 100%;" onchange="calculateTotal(this)"></td>
+                        <td><input type="time" class="end-time" style="width: 100%;" onchange="calculateTotal(this)"></td>
+                        <td><input type="text" placeholder="Ore" class="total-hours" style="width: 100%;" disabled></td> <!-- Nuovo campo per totale ore lavorate -->
+                    </tr>
+                    <tr>
+                        <td colspan="3" style="text-align: right;"><strong>Totale Ore Lavorate:</strong></td> <!-- Totale ore lavorate -->
+                        <td><input type="text" placeholder="Ore" class="total-hours" id="total-hours-sum" style="width: 100%;" disabled></td> <!-- Totale ore lavorate con larghezza fissa -->
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="3" style="text-align: right;"><strong>Numero di addetti:</strong></td> <!-- Numero di addetti -->
+                        <td>
+                            <input type="number" id="numero-addetti" min="1" style="width: 50px;" oninput="updateTotalHours();"> <!-- Campo per il numero di addetti -->
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" style="text-align: right;"><strong>Ore Totali (con addetti):</strong></td> <!-- Ore totali con addetti -->
+                        <td>
+                            <input type="text" id="total-hours-with-staff" style="width: 100%;" disabled> <!-- Campo per le ore totali con addetti -->
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+        <div class="work-table">
+            <table style="width: 100%; margin-top: 20px;">
+                <thead>
+                    <tr>
+                        <th style="text-align: center;">
+                            PRODOTTI UTILIZZATI<br>
+                            <span style="font-size: x-small;">(da indicare esclusivamente nel caso in cui i prodotti non siano stati indicati nel DDT utilizzato per accompagnare i prodotti)</span> <!-- Titolo per i prodotti utilizzati -->
+                        </th>
+                        <th style="font-size: small; text-align: center; width: 50px;">Quantità</th> <!-- Colonna per la quantità -->
+                        <th style="font-size: small; text-align: center;">Eventuale prodotto sostituito e DDT di riferimento</th> <!-- Colonna per eventuali prodotti sostituiti -->
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><input type="text" placeholder="Prodotto 1" list="articoli1" style="width: 100%;"  onfocus="startDictation(this)"></td> <!-- Campo per il nome del prodotto 1 -->
+                        <td><input type="number" placeholder="Quantità" style="width: 100%;"></td> <!-- Campo per la quantità del prodotto 1 -->
+                        <td><input type="text" placeholder="Note" style="width: 100%;" onfocus="startDictation(this)"></td> <!-- Campo per eventuali note sul prodotto 1 -->
+                    </tr>
+                    <tr>
+                        <td><input type="text" placeholder="Prodotto 2" style="width: 100%;" onfocus="startDictation(this)"></td> <!-- Campo per il nome del prodotto 2 -->
+                        <td><input type="number" placeholder="Quantità" style="width: 100%;"></td> <!-- Campo per la quantità del prodotto 2 -->
+                        <td><input type="text" placeholder="Note" style="width: 100%;" onfocus="startDictation(this)"></td> <!-- Campo per eventuali note sul prodotto 2 -->
+                    </tr>
+                    <tr>
+                        <td><input type="text" placeholder="Prodotto 3" style="width: 100%;" onfocus="startDictation(this)"></td> <!-- Campo per il nome del prodotto 3 -->
+                        <td><input type="number" placeholder="Quantità" style="width: 100%;"></td> <!-- Campo per la quantità del prodotto 3 -->
+                        <td><input type="text" placeholder="Note" style="width: 100%;" onfocus="startDictation(this)"></td> <!-- Campo per eventuali note sul prodotto 3 -->
+                    </tr>
+                    <tr>
+                        <td><input type="text" placeholder="Prodotto 4" style="width: 100%;" onfocus="startDictation(this)"></td> <!-- Campo per il nome del prodotto 4 -->
+                        <td><input type="number" placeholder="Quantità" style="width: 100%;"></td> <!-- Campo per la quantità del prodotto 4 -->
+                        <td><input type="text" placeholder="Note" style="width: 100%;" onfocus="startDictation(this)"></td> <!-- Campo per eventuali note sul prodotto 4 -->
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div style="margin-top: 20px; display: flex; width: 100%; align-items: center;">
+            <label style="margin-right: 10px;">Ulteriori prodotti da fatturare consegnati con il DDT N°:</label> <!-- Etichetta per ulteriori prodotti -->
+            <input type="text" placeholder="Numero DDT" style="width: 100px; margin-right: 10px;"> <!-- Campo per il numero DDT -->
+            <label style="margin-right: 5px;">del</label> <!-- Etichetta per la data Del -->
+            <input type="date" style="margin-left: 10px;"> <!-- Campo per la data Del -->
+        </div>
+        <div style="margin-top: 20px; display: flex; align-items: center;"> <!-- Nuova riga per chilometri e ore di viaggio -->
+            <label style="margin-right: 10px;">Chilometri percorsi per raggiungere il cliente e ritornare Km:</label> <!-- Etichetta per i chilometri -->
+            <input type="number" placeholder="Km" style="width: 100px; margin-right: 10px;"> <!-- Campo per i chilometri -->
+            <label style="font-size: small; margin-right: 5px;">Ore viaggio:</label> <!-- Etichetta per le ore di viaggio -->
+            <input type="text" placeholder="Ore-Viaggio" style="width: 100px; margin-left: 10px;"> <!-- Campo per le ore di viaggio -->
+        </div>
+        <div style="margin-top: 20px; display: flex; align-items: center;"> <!-- Nuova riga per Stato intervento -->
+            <label style="margin-right: 10px;">Stato intervento: CONCLUSO</label> <!-- Etichetta per lo stato dell'intervento -->
+            <select style="margin-right: 10px;"> <!-- Selettore per lo stato dell'intervento -->
+                <option value="si">Sì</option> <!-- Opzione Sì -->
+                <option value="no">No</option> <!-- Opzione No -->
+            </select>
+            <label style="margin-right: 5px;">Note:</label> <!-- Etichetta per eventuali note -->
+            <input type="text" placeholder="Eventuali note" style="width: 200px;"> <!-- Campo per eventuali note di testo -->
+        </div>
+        <div style="display: flex; margin-top: 20px; align-items: stretch; width: 100%;"> <!-- Cambiato a 'stretch' per garantire che occupino la stessa altezza -->
+            <div class="canvas-container" style="display: flex; flex-direction: column; align-items: center; flex: 1; margin-right: 20px;"> <!-- Contenitore per la firma operatore -->
+                <label>Firma Operatore Rokepo</label> <!-- Etichetta per la firma dell'operatore -->
+                <canvas id="signature-pad-operator" style=" width: 100%; height: 150px;"></canvas> <!-- Box per la firma operatore -->
+                <button id="clear-signature-operator" style="margin-top: 10px;">Pulisci Firma Operatore</button> <!-- Pulsante per pulire la firma operatore -->
+            </div>
+            <div class="canvas-container"style="display: flex; flex-direction: column; align-items: center; flex: 1;"> <!-- Contenitore per la firma cliente -->
+                <label>Firma Cliente</label> <!-- Etichetta per la firma del cliente -->
+                <canvas id="signature-pad-client" style=" width: 100%; height: 150px;"></canvas> <!-- Box per la firma cliente -->
+                <button id="clear-signature-client" style="margin-top: 10px;">Pulisci Firma Cliente</button> <!-- Pulsante per pulire la firma cliente -->
+            </div>
+        </div>
+    </div>
+    <button id="generate-pdf" style="margin-top: 20px;">Genera PDF</button> <!-- Pulsante per generare il PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script> <!-- Libreria per catturare il contenuto HTML come immagine -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script> <!-- Libreria per generare PDF -->
+    <script>
+        let isDictating = false; // Variabile per controllare se la dettatura è in corso
+
+        // Funzione per calcolare il totale delle ore lavorate
+        function calculateTotal(element) {
+            const row = element.closest('tr'); // Trova la riga più vicina all'elemento
+            const startTimeInput = row.querySelector('.start-time'); // Trova il campo di input per l'ora di inizio
+            const endTimeInput = row.querySelector('.end-time'); // Trova il campo di input per l'ora di fine
+            const totalHoursInput = row.querySelector('.total-hours'); // Trova il campo di input per il totale delle ore
+
+            const startTime = startTimeInput.value; // Ottiene il valore dell'ora di inizio
+            const endTime = endTimeInput.value; // Ottiene il valore dell'ora di fine
+
+            if (startTime && endTime) { // Se entrambi i valori sono presenti
+                const startParts = startTime.split(':'); // Divide l'ora di inizio in ore e minuti
+                const endParts = endTime.split(':'); // Divide l'ora di fine in ore e minuti
+
+                const startDate = new Date(); // Crea un nuovo oggetto data per l'ora di inizio
+                startDate.setHours(startParts[0], startParts[1], 0); // Imposta le ore e i minuti
+
+                const endDate = new Date(); // Crea un nuovo oggetto data per l'ora di fine
+                endDate.setHours(endParts[0], endParts[1], 0); // Imposta le ore e i minuti
+
+                // Gestisce i turni notturni
+                if (endDate <= startDate) {
+                    endDate.setDate(endDate.getDate() + 1); // Aggiunge un giorno se l'ora di fine è minore o uguale all'ora di inizio
+                }
+
+                const totalMinutes = (endDate - startDate) / (1000 * 60); // Calcola il totale in minuti
+                const hours = Math.floor(totalMinutes / 60); // Calcola le ore
+                const minutes = totalMinutes % 60; // Calcola i minuti rimanenti
+
+                totalHoursInput.value = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`; // Format as hh:mm
+
+                // Aggiorna il totale delle ore
+                updateTotalHours();
+            } else {
+                totalHoursInput.value = ''; // Pulisce il totale se uno dei tempi non è impostato
+            }
+        }
+
+        // Funzione per aggiornare il totale delle ore lavorate
+        function updateTotalHours() {
+            const totalHoursInputs = document.querySelectorAll('.total-hours:not(#total-hours-sum)'); // Escludi il campo di somma totale
+            let totalHours = 0; // Inizializza il totale delle ore
+
+            totalHoursInputs.forEach(input => {
+                const timeValue = input.value; // Ottiene il valore del campo di input
+                if (timeValue) {
+                    const [hours, minutes] = timeValue.split(':').map(Number); // Divide il valore in ore e minuti
+                    totalHours += hours + minutes / 60; // Converte il totale in ore
+                }
+            });
+
+            const totalHoursSumInput = document.getElementById('total-hours-sum'); // Trova il campo di somma totale
+            const totalHoursFormatted = formatHours(totalHours); // Format the total hours
+            totalHoursSumInput.value = totalHoursFormatted; // Aggiorna il campo di somma totale
+
+            // Calcola le ore totali moltiplicate per il numero di addetti
+            const numberOfStaff = document.getElementById('numero-addetti').value || 0; // Ottiene il numero di addetti
+            const totalHoursWithStaffInput = document.getElementById('total-hours-with-staff'); // Trova il campo per le ore totali con addetti
+            totalHoursWithStaffInput.value = formatHours(totalHours * numberOfStaff); // Aggiorna il campo con il totale
+        }
+
+        // Funzione per formattare le ore in formato hh:mm
+        function formatHours(totalHours) {
+            
+            const hours = Math.floor(totalHours); // Calcola le ore
+            const minutes = Math.round((totalHours - hours) * 60); // Calcola i minuti
+            return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`; // Format as hh:mm
+        }
+
+        // Funzione per avviare la dettatura vocale
+        function startDictation(input) {
+            if (isDictating) return; // Se la dettatura è già in corso, esci dalla funzione
+
+            if (window.SpeechRecognition || window.webkitSpeechRecognition) { // Controlla se la dettatura è supportata
+                const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)(); // Crea un nuovo oggetto di riconoscimento vocale
+                recognition.lang = 'it-IT'; // Imposta la lingua su italiano
+                recognition.interimResults = false; // Non mostra risultati intermedi
+
+                recognition.onstart = function() {
+                    isDictating = true; // Imposta la variabile a true quando inizia la dettatura
+                };
+
+                recognition.onresult = function(event) {
+                    const transcript = event.results[0][0].transcript; // Ottiene il testo riconosciuto
+                    input.value = transcript; // Imposta il valore dell'input al testo riconosciuto
+                };
+
+                recognition.onerror = function(event) {
+                    console.error('Speech recognition error:', event.error); // Gestisce gli errori di riconoscimento
+                    isDictating = false; // Imposta la variabile a false in caso di errore
+                };
+
+                recognition.onend = function() {
+                    isDictating = false; // Imposta la variabile a false quando la dettatura termina
+                };
+
+                recognition.start(); // Avvia il riconoscimento vocale
+            } else {
+                alert('Speech recognition not supported in this browser.'); // Messaggio di errore se non supportato
+            }
+        }
+
+        // Funzioni per la firma operatore
+        const off_set = 1.33;  //offset per il calcolo della posizione mouse
+        const canvasOperator = document.getElementById('signature-pad-operator'); // Trova il canvas per la firma dell'operatore
+        const ctxOperator = canvasOperator.getContext('2d'); // Ottiene il contesto 2D per il disegno
+        let drawingOperator = false; // Stato del disegno
+
+        // Imposta il canvas per il disegno
+        canvasOperator.width = 300; // Larghezza del canvas
+        canvasOperator.height = 100; // Altezza del canvas
+
+        // Eventi per il disegno della firma dell'operatore
+        canvasOperator.addEventListener('mousedown', (e) => {
+            drawingOperator = true; // Inizia a disegnare
+            ctxOperator.beginPath(); // Inizia un nuovo percorso
+            ctxOperator.moveTo(e.offsetX/off_set, e.offsetY/off_set); // Muove il punto di partenza
+        });
+
+        canvasOperator.addEventListener('mousemove', (e) => {
+            if (drawingOperator) { // Se si sta disegnando
+                ctxOperator.lineTo(e.offsetX/off_set, e.offsetY/off_set); // Disegna una linea fino alla posizione attuale
+                ctxOperator.stroke(); // Applica il tratto
+            }
+        });
+
+        canvasOperator.addEventListener('mouseup', () => {
+            drawingOperator = false; // Ferma il disegno
+            ctxOperator.closePath(); // Chiude il percorso
+        });
+
+        canvasOperator.addEventListener('mouseleave', () => {
+            drawingOperator = false; // Ferma il disegno se il mouse esce dal canvas
+            ctxOperator.closePath(); // Chiude il percorso
+        });
+
+        document.getElementById('clear-signature-operator').addEventListener('click', () => {
+            ctxOperator.clearRect(0, 0, canvasOperator.width, canvasOperator.height); // Pulisce l'area della firma operatore
+        });
+
+        // Funzioni per la firma cliente
+        const canvasClient = document.getElementById('signature-pad-client'); // Trova il canvas per la firma del cliente
+        const ctxClient = canvasClient.getContext('2d'); // Ottiene il contesto 2D per il disegno
+        let drawingClient = false; // Stato del disegno
+
+        // Imposta il canvas per il disegno
+        canvasClient.width = 300; // Larghezza del canvas
+        canvasClient.height = 100; // Altezza del canvas
+
+        // Eventi per il disegno della firma del cliente
+        canvasClient.addEventListener('mousedown', (e) => {
+            drawingClient = true; // Inizia a disegnare
+            ctxClient.beginPath(); // Inizia un nuovo percorso
+            ctxClient.moveTo(e.offsetX/off_set, e.offsetY/off_set); // Muove il punto di partenza
+        });
+
+        canvasClient.addEventListener('mousemove', (e) => {
+            if (drawingClient) { // Se si sta disegnando
+                ctxClient.lineTo(e.offsetX/off_set, e.offsetY/off_set); // Disegna una linea fino alla posizione attuale
+                ctxClient.stroke(); // Applica il tratto
+            }
+        });
+
+        canvasClient.addEventListener('mouseup', () => {
+            drawingClient = false; // Ferma il disegno
+            ctxClient.closePath(); // Chiude il percorso
+        });
+
+        canvasClient.addEventListener('mouseleave', () => {
+            drawingClient = false; // Ferma il disegno se il mouse esce dal canvas
+            ctxClient.closePath(); // Chiude il percorso
+        });
+
+        document.getElementById('clear-signature-client').addEventListener('click', () => {
+            ctxClient.clearRect(0, 0, canvasClient.width, canvasClient.height); // Pulisce l'area della firma cliente
+        });
+
+        // Supporto per il tocco (touch) per il canvas operatore
+        canvasOperator.addEventListener('touchstart', (e) => {
+            e.preventDefault(); // Previene lo scrolling della pagina
+            const touch = e.touches[0]; // Ottiene il primo tocco
+            drawingOperator = true; // Inizia a disegnare
+            ctxOperator.beginPath(); // Inizia un nuovo percorso
+            ctxOperator.moveTo(touch.clientX - canvasOperator.getBoundingClientRect().left, touch.clientY - canvasOperator.getBoundingClientRect().top); // Muove il punto di partenza
+        });
+
+        canvasOperator.addEventListener('touchmove', (e) => {
+            e.preventDefault(); // Previene lo scrolling della pagina
+            if (drawingOperator) { // Se si sta disegnando
+                const touch = e.touches[0]; // Ottiene il primo tocco
+                ctxOperator.lineTo(touch.clientX - canvasOperator.getBoundingClientRect().left, touch.clientY - canvasOperator.getBoundingClientRect().top); // Disegna una linea fino alla posizione attuale
+                ctxOperator.stroke(); // Applica il tratto
+            }
+        });
+
+        canvasOperator.addEventListener('touchend', () => {
+            drawingOperator = false; // Ferma il disegno
+            ctxOperator.closePath(); // Chiude il percorso
+        });
+
+        // Supporto per il tocco (touch) per il canvas cliente
+        canvasClient.addEventListener('touchstart', (e) => {
+            e.preventDefault(); // Previene lo scrolling della pagina
+            const touch = e.touches[0]; // Ottiene il primo tocco
+            drawingClient = true; // Inizia a disegnare
+            ctxClient.beginPath(); // Inizia un nuovo percorso
+            ctxClient.moveTo(touch.clientX - canvasClient.getBoundingClientRect().left, touch.clientY - canvasClient.getBoundingClientRect().top); // Muove il punto di partenza
+        });
+
+        canvasClient.addEventListener('touchmove', (e) => {
+            e.preventDefault(); // Previene lo scrolling della pagina
+            if (drawingClient) { // Se si sta disegnando
+                const touch = e.touches[0]; // Ottiene il primo tocco
+                ctxClient.lineTo(touch.clientX - canvasClient.getBoundingClientRect().left, touch.clientY - canvasClient.getBoundingClientRect().top); // Disegna una linea fino alla posizione attuale
+                ctxClient.stroke(); // Applica il tratto
+            }
+        });
+
+        canvasClient.addEventListener('touchend', () => {
+            drawingClient = false; // Ferma il disegno
+            ctxClient.closePath(); // Chiude il percorso
+        });
+
+        // Funzione per generare il PDF
+        document.getElementById('generate-pdf').addEventListener('click', () => {
+            const sede = document.getElementById('sede').value; // Ottiene il nome della sede
+            const dataIntervento = document.getElementById('data-intervento').value; // Ottiene la data dell'intervento
+            const formattedDate = new Date(dataIntervento).toLocaleDateString('it-IT'); // Formatta la data in gg-mm-aaaa
+
+            generateTextFile(); // Genera il file di testo
+
+            const { jsPDF } = window.jspdf; // Importa la libreria jsPDF
+
+            // Cattura l'elemento da convertire in PDF
+            html2canvas(document.querySelector('.content')).then(canvas => {
+                const imgData = canvas.toDataURL('image/png'); // Cattura l'immagine del contenuto
+                const pdf = new jsPDF(); // Crea un nuovo documento PDF
+                const imgWidth = 190; // Larghezza dell'immagine nel PDF
+                const pageHeight = pdf.internal.pageSize.height; // Altezza della pagina PDF
+                const imgHeight = (canvas.height * imgWidth) / canvas.width; // Calcola l'altezza dell'immagine
+                let heightLeft = imgHeight; // Altezza rimanente da stampare
+
+                let position = 0; // Posizione corrente
+
+                // Aggiungi l'immagine al PDF
+                pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight); // Aggiunge l'immagine al PDF
+                heightLeft -= pageHeight; // Aggiorna l'altezza rimanente
+
+                // Aggiungi nuove pagine se necessario
+                while (heightLeft >= 0) {
+                    position = heightLeft - imgHeight; // Calcola la nuova posizione
+                    pdf.addPage(); // Aggiunge una nuova pagina
+                    pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight); // Aggiunge l'immagine alla nuova pagina
+                    heightLeft -= pageHeight; // Aggiorna l'altezza rimanente
+                }
+
+                // Salva il PDF
+                pdf.save(`Modulo Intervento - ${sede} - ${formattedDate}.pdf`); // Nome file con sede e data
+                console.log("PDF generato e salvato come '" + `Modulo Intervento - ${sede} - ${formattedDate}.pdf` + "'."); // Messaggio di conferma
+            }).catch(error => {
+                console.error("Errore durante la generazione del PDF:", error); // Gestisce gli errori durante la generazione del PDF
+            });
+        });
+
+        // Funzione per generare un file di testo
+        function generateTextFile() {
+            // Raccogli i dati dai campi
+            let data = `Modulo Intervento\n-------------------\n`; // Inizializza il contenuto del file di testo
+
+            // Funzione per ottenere il valore di un campo con gestione degli errori
+            const getFieldValue = (id) => {
+                const field = document.getElementById(id); // Trova il campo per ID
+                return field ? field.value : 'N/A'; // Restituisce 'N/A' se il campo non esiste
+            };
+
+            // Aggiungi i valori dei campi editabili
+            const sede = getFieldValue('sede'); // Ottiene il valore della sede
+            const dataIntervento = getFieldValue('data-intervento'); // Ottiene il valore della data dell'intervento
+            const formattedDate = new Date(dataIntervento).toLocaleDateString('it-IT'); // Formatta la data in gg-mm-aaaa
+
+            data += `Operatore: ${getFieldValue('operatore')}\n`; // Aggiunge l'operatore al file di testo
+            data += `Data intervento: ${formattedDate}\n`; // Aggiunge la data dell'intervento al file di testo
+            data += `Cliente: ${getFieldValue('cliente')}\n`; // Aggiunge il cliente al file di testo
+            data += `Sede: ${sede}\n`; // Aggiunge la sede al file di testo
+            
+             // Aggiungi lo stato dei checkbox
+            data += `Motivo dell'intervento:\n`; // Inizio della sezione motivi
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]'); // Seleziona tutti i checkbox
+            let selectedReasons = []; // Array per i motivi selezionati
+            checkboxes.forEach(checkbox => {
+                if (checkbox.checked) {
+                    selectedReasons.push(checkbox.value); // Aggiunge il valore del checkbox selezionato
+                }
+            });
+
+            // Aggiungi i motivi selezionati al file di testo
+            if (selectedReasons.length > 0) {
+                data += selectedReasons.join(', ') + '\n'; // Aggiunge i motivi selezionati
+            } else {
+                data += 'Nessun motivo selezionato.\n'; // Messaggio se nessun motivo è selezionato
+            }
+
+            // Aggiungi i dettagli delle ore lavorate
+            data += `Dettagli Ore Lavorate:\n`; // Inizio della sezione dettagli ore lavorate
+            const totalHoursInputs = document.querySelectorAll('.total-hours'); // Seleziona tutti i campi di ore lavorate
+            totalHoursInputs.forEach((input, index) => {
+                if (index < 5) { // Limita a 5 lavori
+                    const descriptionInput = document.querySelector(`input[placeholder="Descrizione lavoro ${index + 1}"]`); // Trova la descrizione del lavoro
+                    data += `Descrizione lavoro ${index + 1}: ${descriptionInput ? descriptionInput.value : 'N/A'}, Ore: ${input.value || 'N/A'}\n`; // Aggiunge la descrizione e le ore lavorate
+                }
+            });
+            
+            
+            data += `Chilometri percorsi: ${document.querySelector('input[placeholder="Km"]') ? document.querySelector('input[placeholder="Km"]').value : 'N/A'}\n`; // Aggiunge i chilometri percorsi
+            data += `Ore viaggio: ${document.querySelector('input[placeholder="Ore-Viaggio"]') ? document.querySelector('input[placeholder="Ore-Viaggio"]').value : 'N/A'}\n`; // Aggiunge le ore di viaggio
+
+           
+            
+
+            // Aggiungi il numero di addetti e le ore totali
+            data += `Numero di addetti: ${getFieldValue('numero-addetti')}\n`; // Aggiunge il numero di addetti
+            data += `Ore Totali (con addetti): ${getFieldValue('total-hours-with-staff')}\n`; // Aggiunge le ore totali con addetti
+
+            // Aggiungi i prodotti utilizzati
+            data += `Prodotti Utilizzati:\n`; // Inizio della sezione prodotti utilizzati
+            const productRows = document.querySelectorAll('tbody tr'); // Seleziona tutte le righe della tabella dei prodotti
+            productRows.forEach((row, index) => {
+                if (index < 4) { // Limita a 4 prodotti
+                    const productInput = row.querySelector('input[type="text"]'); // Input per il nome del prodotto
+                    const quantityInput = row.querySelector('input[type="number"]'); // Input per la quantità
+                    const noteInput = row.querySelector('input[placeholder="Note"]'); // Input per le note
+
+                    const productName = productInput ? productInput.value : 'N/A'; // Ottiene il nome del prodotto
+                    const quantity = quantityInput ? quantityInput.value : 'N/A'; // Ottiene la quantità
+                    const note = noteInput ? noteInput.value : 'N/A'; // Ottiene le note
+
+                    data += `Prodotto ${index + 1}: ${productName}, Quantità: ${quantity}, Note: ${note}\n`; // Aggiunge i dettagli del prodotto
+                }
+            });
+
+            // Crea un blob di testo
+            const blob = new Blob([data], { type: 'text/plain' }); // Crea un blob di testo
+            const url = URL.createObjectURL(blob); // Crea un URL per il blob
+
+            // Crea un link per il download
+            const a = document.createElement('a'); // Crea un nuovo elemento <a>
+            a.href = url; // Imposta l'URL del blob come href
+            a.download = `Modulo Intervento - ${sede} - ${formattedDate}.txt`; // Nome file con sede e data
+            document.body.appendChild(a); // Aggiunge il link al corpo del documento
+            a.click(); // Simula un clic sul link per avviare il download
+            document.body.removeChild(a); // Rimuove il link dal documento
+            URL.revokeObjectURL(url); // Libera la memoria
+            console.log("File di testo generato e scaricato come '" + a.download + "'."); // Messaggio di conferma
+        }
+
+        // Funzione per caricare i dati dal file di testo
+        function loadArticoli() {
+            fetch('Tabella articoli.txt') // Sostituisci con il percorso corretto del file
+                .then(response => response.text())
+                .then(data => {
+                    const articoli = data.split('\n'); // Divide il contenuto in righe
+                    const datalist = document.getElementById('articoli1'); // Ottiene il datalist
+                    console.log(datalist);    
+                    articoli.forEach(articolo => {
+                        const option = document.createElement('option'); // Crea un nuovo elemento option
+                        option.value = articolo.trim(); // Imposta il valore dell'opzione
+                        datalist.appendChild(option); // Aggiunge l'opzione al datalist
+                    });
+                })
+                
+                .catch(error => console.error('Errore nel caricamento degli articoli:', error)); // Gestisce gli errori
+        }
+
+        // Carica gli articoli al caricamento della pagina
+        window.onload = loadArticoli;
+    </script>
     
-    <!-- Applicazione -->
-    <script src="app.js"></script>
 </body>
 </html>
