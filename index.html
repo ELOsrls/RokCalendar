@@ -12,17 +12,7 @@
     <title>Modulo Intervento</title> <!-- Titolo della pagina -->
     <style>
         /* Stili generali per il corpo della pagina */
-        .row {
-            display: none;
-            margin-bottom: 10px;
-        }
-        .row.visible {
-            display: flex; /* Layout flessibile per allineare etichette e input */
-            align-items: center; /* Allinea verticalmente al centro */
-            margin-bottom: 5px; /* Spazio sotto ogni campo */
-            padding-top: 5px; /* Spazio sopra ogni campo */
-            justify-content: flex-start; /* Allinea i campi a sinistra */
-        }
+            
         body {
             background-color: #FFFACD; /* Colore di sfondo giallo pastello */
             font-family: Arial, sans-serif; /* Font utilizzato per il testo */
@@ -145,6 +135,9 @@
         .canvas-container canvas {
             background-color: #d0cdff97; /* Colore giallo pastello */
             border: 3px solid #2a11cb; /* Bordo nero per il canvas */
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
         }
         /* Media queries per schermi più piccoli */
         @media (max-width: 600px) {
@@ -420,10 +413,16 @@
 
 
 
-
     <script>
         let isDictating = false; // Variabile per controllare se la dettatura è in corso
         let count = 1;  // Inizializza il valore del contatore degli operatori
+
+        // 
+        //######################################################### 
+        // Funzione per il calcolo degli orari
+        //#########################################################
+        //   
+
 
         // Funzione per calcolare il totale delle ore lavorate
         function calculateTotal(element) {
@@ -536,8 +535,11 @@
         }
 
 
-
-
+        // 
+        //######################################################### 
+        // Funzione per le firme OPERATORE con touchscreen o mouse
+        //#########################################################
+        //   
 
 
         // Funzioni per la firma operatore
@@ -547,7 +549,7 @@
         let drawingOperator = false; // Stato del disegno
 
 
-
+      
 
         // Imposta il canvas per il disegno
         canvasOperator.width = 300; // Larghezza del canvas
@@ -638,19 +640,19 @@
         //     ctxOperator.moveTo(touch.clientX - canvasOperator.getBoundingClientRect().left, touch.clientY - canvasOperator.getBoundingClientRect().top); // Muove il punto di partenza
         // });
 
-        canvasOperator.addEventListener('touchmove', (e) => {
-            e.preventDefault(); // Previene lo scrolling della pagina
-            if (drawingOperator) { // Se si sta disegnando
-                const touch = e.touches[0]; // Ottiene il primo tocco
-                ctxOperator.lineTo(touch.clientX - canvasOperator.getBoundingClientRect().left, touch.clientY - canvasOperator.getBoundingClientRect().top); // Disegna una linea fino alla posizione attuale
-                ctxOperator.stroke(); // Applica il tratto
-            }
-        });
+        // canvasOperator.addEventListener('touchmove', (e) => {
+        //     e.preventDefault(); // Previene lo scrolling della pagina
+        //     if (drawingOperator) { // Se si sta disegnando
+        //         const touch = e.touches[0]; // Ottiene il primo tocco
+        //         ctxOperator.lineTo(touch.clientX - canvasOperator.getBoundingClientRect().left, touch.clientY - canvasOperator.getBoundingClientRect().top); // Disegna una linea fino alla posizione attuale
+        //         ctxOperator.stroke(); // Applica il tratto
+        //     }
+        // });
 
-        canvasOperator.addEventListener('touchend', () => {
-            drawingOperator = false; // Ferma il disegno
-            ctxOperator.closePath(); // Chiude il percorso
-        });
+        // canvasOperator.addEventListener('touchend', () => {
+        //     drawingOperator = false; // Ferma il disegno
+        //     ctxOperator.closePath(); // Chiude il percorso
+        // });
 
         // Supporto per il tocco (touch) per il canvas cliente
         canvasClient.addEventListener('touchstart', (e) => {
