@@ -2,7 +2,7 @@
  ######################################################### 
  MODULO INTERVENTO ON LINE
  #########################################################
- -->
+-->
 
 <!DOCTYPE html>
 <html lang="it">
@@ -12,6 +12,17 @@
     <title>Modulo Intervento</title> <!-- Titolo della pagina -->
     <style>
         /* Stili generali per il corpo della pagina */
+        .row {
+            display: none;
+            margin-bottom: 10px;
+        }
+        .row.visible {
+            display: flex; /* Layout flessibile per allineare etichette e input */
+            align-items: center; /* Allinea verticalmente al centro */
+            margin-bottom: 5px; /* Spazio sotto ogni campo */
+            padding-top: 5px; /* Spazio sopra ogni campo */
+            justify-content: flex-start; /* Allinea i campi a sinistra */
+        }
         body {
             background-color: #FFFACD; /* Colore di sfondo giallo pastello */
             font-family: Arial, sans-serif; /* Font utilizzato per il testo */
@@ -162,21 +173,26 @@
     </div>
     <div class="content">
         <div class="info-box">
-            <div class="field">
-                <label for="operatore" style="margin-left: 10px;">Operatore:</label> <!-- Etichetta per il campo Operatore -->
-                <input type="text" id="operatore" list="operatori" style="width: calc(100% - 200px); margin-right: 10px;" onfocus="startDictation(this)"> <!-- Campo di input per l'operatore con larghezza ridotta -->
-                <datalist id="operatori"> <!-- Datalist per suggerimenti -->
+            <div id="operator-field-container"> <!-- Contenitore per i campi operatore -->
+                <div class="field" id="operator-field1">
+                    <label for="operatore1" style="margin-left: 10px;">Operatore 1:</label>
+                    <input type="text" list="operatori" style="width: calc(100% - 200px); margin-right: 10px;" onfocus="startDictation(this)">
+                    <datalist id="operatori">
                     <option value="Maurizio Rispoli">
                     <option value="Marco Cumani">
                     <option value="Isiah Lewis">
                     <option value="Gianluca Papa">
                     <option value="Paolo Bonazzi">
-                </datalist>
-               
-                    <label for="data-intervento" style=" margin-left: 20px; white-space: nowrap;">Data intervento:</label> <!-- Etichetta per il campo Data intervento -->
-                    <input type="date" id="data-intervento" style="margin-right: 10px;"> <!-- Campo di input per la data dell'intervento -->
-
+                    </datalist>
+                    <button type="button" id="add-operator" style="margin-left: 10px;">+</button> <!-- Pulsante per aggiungere l'operatore -->
+                    <button type="button" id="remove-operator" style="margin-left: 10px;">- </button> <!-- Pulsante per aggiungere l'operatore -->
+                </div>
             </div>
+            <div class="field">
+                <label for="data-intervento:" style=" margin-left: 10px; white-space: nowrap;">Data intervento:</label> <!-- Etichetta per il campo Data intervento -->
+                <input type="date" id="data-intervento" style="margin-right: 10px;"> <!-- Campo di input per la data dell'intervento -->
+            </div>
+        
             <div class="field">
                 <label for="cliente" style="margin-left: 10px;">Cliente:</label> <!-- Etichetta per il campo Cliente -->
                 <input type="text" id="cliente" style="width: calc(100% - 200px); margin-right: 10px;" onfocus="startDictation(this)"> <!-- Campo di input per il cliente con supporto per la dettatura -->
@@ -198,7 +214,7 @@
                     <label>Offerta N°</label> <!-- Etichetta per il campo Offerta N° -->
                     <input type="text" class="offer-input" maxlength="3" onfocus="startDictation(this)"> <!-- Campo di input per Offerta N° con supporto per la dettatura -->
                     <label>Del</label> <!-- Etichetta per il campo Del -->
-                    <input type="date" class="del-input"> <!-- Campo di input per la data Del -->
+                    <input type="date" id="data-offerta-1" class="del-input"> <!-- Campo di input per la data Del -->
                 </div>
             </div>
             <div class="separator"></div> <!-- Linea di separazione -->
@@ -400,8 +416,14 @@
     <button id="generate-pdf" style="margin-top: 20px;">Genera PDF</button> <!-- Pulsante per generare il PDF -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script> <!-- Libreria per catturare il contenuto HTML come immagine -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script> <!-- Libreria per generare PDF -->
+
+
+
+
+
     <script>
         let isDictating = false; // Variabile per controllare se la dettatura è in corso
+        let count = 1;  // Inizializza il valore del contatore degli operatori
 
         // Funzione per calcolare il totale delle ore lavorate
         function calculateTotal(element) {
@@ -667,7 +689,13 @@
             });
         });
 
-        // Funzione per generare un file di testo
+
+        // 
+        //######################################################### 
+        // Funzione generazione file di testo
+        //#########################################################
+        //     
+
         function generateTextFile() {
             // Raccogli i dati dai campi
             let data = `Modulo Intervento\n-------------------\n`; // Inizializza il contenuto del file di testo
@@ -677,8 +705,8 @@
                 const field = document.getElementById(id); // Trova il campo per ID
                 return field ? field.value : 'N/A'; // Restituisce 'N/A' se il campo non esiste
             };
-
-            // Aggiungi i valori dei campi editabili
+            // ---------------------------------------------------------------------------------------
+            // Aggiungi i valori dei campi anagrafici
             const sede = getFieldValue('sede'); // Ottiene il valore della sede
             const dataIntervento = getFieldValue('data-intervento'); // Ottiene il valore della data dell'intervento
             const formattedDate = new Date(dataIntervento).toLocaleDateString('it-IT'); // Formatta la data in gg-mm-aaaa
@@ -687,14 +715,27 @@
             data += `Data intervento: ${formattedDate}\n`; // Aggiunge la data dell'intervento al file di testo
             data += `Cliente: ${getFieldValue('cliente')}\n`; // Aggiunge il cliente al file di testo
             data += `Sede: ${sede}\n`; // Aggiunge la sede al file di testo
-            
+            //------------------------------------------------------------------------------------------
              // Aggiungi lo stato dei checkbox
-            data += `Motivo dell'intervento:\n`; // Inizio della sezione motivi
+            data += `Motivo dell'intervento:  `; // Inizio della sezione motivi
             const checkboxes = document.querySelectorAll('input[type="checkbox"]'); // Seleziona tutti i checkbox
             let selectedReasons = []; // Array per i motivi selezionati
             checkboxes.forEach(checkbox => {
                 if (checkbox.checked) {
                     selectedReasons.push(checkbox.value); // Aggiunge il valore del checkbox selezionato
+                    
+                    // Trova il contenitore della checkbox
+                    const checkboxLabel = checkbox.closest('.checkbox-label');
+                    const checkboxLabelRight = checkboxLabel.querySelector('.checkbox-label-right'); // Trova il contenitore a destra
+
+                    // Trova i campi del contratto/offerta e della data
+                    const contractInput = checkboxLabelRight ? checkboxLabelRight.querySelector('input[type="text"]') : null; // Trova il campo del contratto/offerta
+                    const dateInput = checkboxLabelRight ? checkboxLabelRight.querySelector('input[type="date"]') : null; // Trova il campo della data
+
+                    const contractValue = contractInput ? contractInput.value : 'N/A'; // Ottiene il valore del contratto/offerta
+                    const dateValue = dateInput ? dateInput.value : 'N/A'; // Ottiene il valore della data
+
+                    selectedReasons.push(`(${checkbox.value} - Contratto/Offerta: ${contractValue}, Data: ${dateValue})`); // Aggiunge il motivo con contratto e data
                 }
             });
 
@@ -778,6 +819,50 @@
 
         // Carica gli articoli al caricamento della pagina
         window.onload = loadArticoli;
+
+
+
+        // funzione per aggiungere un operatore
+        document.getElementById('add-operator').addEventListener('click', function() {
+            count++; //aggiorna il contatore di operatori
+            const operatorFieldContainer = document.getElementById('operator-field-container');
+            const newField = document.createElement(`div`); // Crea un nuovo contenitore per il campo operatore
+            newField.id = `operatoreNew${count}` // Imposta l'attributo id
+            newField.className = 'field'; // Aggiungi la classe 'field' per lo stile
+            console.log(newField);
+            console.log(count);
+            // Crea il nuovo campo di input per l'operatore
+            let InHTML =`
+                <label for="operatore"${count} style="margin-left: 10px;">Operatore ${count}:</label>
+                <input type="text" list="operatori" style="width: calc(100% - 200px); margin-right: 10px;" onfocus="startDictation(this)">
+                <datalist id="operatori">
+                    <option value="Maurizio Rispoli">
+                    <option value="Marco Cumani">
+                    <option value="Isiah Lewis">
+                    <option value="Gianluca Papa">
+                    <option value="Paolo Bonazzi">
+                </datalist>
+            `;
+            newField.innerHTML = InHTML;
+
+            operatorFieldContainer.appendChild(newField); // Aggiungi il nuovo campo al contenitore
+            
+            
+        });
+
+        document.getElementById('remove-operator').addEventListener('click', function() {
+            //const elementoContenitore = document.getElementById('operator-field-container');
+            //console.log(elementoContenitore);
+            //const idDinamico = `operatoreNew${count}`;
+            //console.log(idDinamico);
+            const elemento = document.getElementById(`operatoreNew${count}`);
+            console.log(elemento);
+            if (elemento) {
+                elemento.remove();
+                count--; //aggiorna il contatore di operatori
+                console.log('Elemento rimosso');
+            }    
+        });
     </script>
     
 </body>
