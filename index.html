@@ -170,7 +170,7 @@
             .canvas-container {
                 /* flex-direction: column;
                 align-items: center;*/
-                width: 500px; /* Larghezza per il campo */
+                width: 100%; /* Larghezza per il campo */
             margin: 0 10px; /* Spazio orizzontale tra gli elementi */
             } 
 
@@ -425,17 +425,17 @@
             </div>
         </div>
         <div style="display: flex; margin-top: 20px; align-items: stretch; width: 100%;"> <!-- Cambiato a 'stretch' per garantire che occupino la stessa altezza -->
-            <div class="canvas-container" style="display: flex; flex-direction: column; align-items: center; margin-right: 20px;"> <!-- Contenitore per la firma operatore -->
+            <div class="canvas-container" style="width: 100%; display: flex; flex-direction: column; align-items: center; margin-right: 20px;"> <!-- Contenitore per la firma operatore -->
                 <label>Firma Operatore Rokepo</label> <!-- Etichetta per la firma dell'operatore -->
-                <canvas id="canvas1" style=" width: 250px; height: 150px;"></canvas> <!-- Box per la firma operatore -->
+                <canvas id="canvas1" style="margin-left: 20px; width: 100%; display: flex; flex-direction: column; align-items: center; margin-right: 20px;"></canvas> <!-- Box per la firma operatore -->
                 <button id="clear-signature-operator" style="margin-top: 10px;">Pulisci Firma Operatore</button> <!-- Pulsante per pulire la firma operatore -->
             </div>
-            <div class="canvas-container"style="display: flex; flex-direction: column; align-items: center; "> <!-- Contenitore per la firma cliente -->
+            <div class="canvas-container"style="width: 100%; display: flex; flex-direction: column; align-items: center; "> <!-- Contenitore per la firma cliente -->
                 <label>Firma Cliente</label> <!-- Etichetta per la firma del cliente -->
-                <canvas id="canvas2" style=" width: 250px; height: 150px;"></canvas> <!-- Box per la firma cliente -->
+                <canvas id="canvas2" style="margin-left: 20px; width: 100%; display: flex; flex-direction: column; align-items: center; margin-right: 20px;""></canvas> <!-- Box per la firma cliente -->
                 <button id="clear-signature-client" style="margin-top: 10px;">Pulisci Firma Cliente</button> <!-- Pulsante per pulire la firma cliente -->
             </div>
-        </div>
+         </div>  <!-- width: 250px; height: 150px; -->
     </div>
     <button id="generate-pdf" style="margin-top: 20px;">Genera PDF</button> <!-- Pulsante per generare il PDF -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script> <!-- Libreria per catturare il contenuto HTML come immagine -->
@@ -590,11 +590,11 @@
         });
 
         function resizeCanvas(canvas) {
-             //const parent = canvas.parentElement;
-             //const size = Math.min(parent.clientWidth / 2 - 20, 400); // Dimensioni dinamiche
-             //canvas.width = size;
-             //canvas.height = parent;
-             //console.log(`Canvas Dimension var:  ${canvas.width} + ${canvas.height}`);
+            //  const parent = canvas.parentElement;
+            //  const size = Math.min(parent.clientWidth / 2 - 20, 400); // Dimensioni dinamiche
+            //  canvas.width = size;
+            //  canvas.height = size;
+            //  console.log(`Canvas Dimension var:  ${canvas.width} + ${canvas.height}`);
         }
 
         function enableDrawing(canvas) {
