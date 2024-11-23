@@ -494,6 +494,14 @@
             return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`; // Format as hh:mm
         }
 
+
+
+         // 
+        //######################################################### 
+        // Funzione per lo speech dictation
+        //#########################################################
+        //   
+
         // Funzione per avviare la dettatura vocale
         function startDictation(input) {
             if (isDictating) return; // Se la dettatura è già in corso, esci dalla funzione
@@ -527,11 +535,19 @@
             }
         }
 
+
+
+
+
+
         // Funzioni per la firma operatore
         const off_set = 1.33;  //offset per il calcolo della posizione mouse
         const canvasOperator = document.getElementById('signature-pad-operator'); // Trova il canvas per la firma dell'operatore
         const ctxOperator = canvasOperator.getContext('2d'); // Ottiene il contesto 2D per il disegno
         let drawingOperator = false; // Stato del disegno
+
+
+
 
         // Imposta il canvas per il disegno
         canvasOperator.width = 300; // Larghezza del canvas
@@ -539,6 +555,7 @@
 
         // Eventi per il disegno della firma dell'operatore
         canvasOperator.addEventListener('mousedown', (e) => {
+            console.log("mousedown canvas Operator"); // Messaggio di conferma
             drawingOperator = true; // Inizia a disegnare
             ctxOperator.beginPath(); // Inizia un nuovo percorso
             ctxOperator.moveTo(e.offsetX/off_set, e.offsetY/off_set); // Muove il punto di partenza
@@ -565,14 +582,24 @@
             ctxOperator.clearRect(0, 0, canvasOperator.width, canvasOperator.height); // Pulisce l'area della firma operatore
         });
 
-        // Funzioni per la firma cliente
-        const canvasClient = document.getElementById('signature-pad-client'); // Trova il canvas per la firma del cliente
-        const ctxClient = canvasClient.getContext('2d'); // Ottiene il contesto 2D per il disegno
-        let drawingClient = false; // Stato del disegno
+        
+        
+        
+        
+         // 
+        //######################################################### 
+        // Funzione per le firme CLIENTE con touchscreen o mouse
+        //#########################################################
+        //   
+           
+         // Funzioni per la firma cliente
+         const canvasClient = document.getElementById('signature-pad-client'); // Trova il canvas per la firma del cliente
+         const ctxClient = canvasClient.getContext('2d'); // Ottiene il contesto 2D per il disegno
+         let drawingClient = false; // Stato del disegno
 
-        // Imposta il canvas per il disegno
-        canvasClient.width = 300; // Larghezza del canvas
-        canvasClient.height = 100; // Altezza del canvas
+         // Imposta il canvas per il disegno
+         canvasClient.width = 300; // Larghezza del canvas
+         canvasClient.height = 100; // Altezza del canvas
 
         // Eventi per il disegno della firma del cliente
         canvasClient.addEventListener('mousedown', (e) => {
@@ -603,13 +630,13 @@
         });
 
         // Supporto per il tocco (touch) per il canvas operatore
-        canvasOperator.addEventListener('touchstart', (e) => {
-            e.preventDefault(); // Previene lo scrolling della pagina
-            const touch = e.touches[0]; // Ottiene il primo tocco
-            drawingOperator = true; // Inizia a disegnare
-            ctxOperator.beginPath(); // Inizia un nuovo percorso
-            ctxOperator.moveTo(touch.clientX - canvasOperator.getBoundingClientRect().left, touch.clientY - canvasOperator.getBoundingClientRect().top); // Muove il punto di partenza
-        });
+        // canvasOperator.addEventListener('touchstart', (e) => {
+        //     e.preventDefault(); // Previene lo scrolling della pagina
+        //     const touch = e.touches[0]; // Ottiene il primo tocco
+        //     drawingOperator = true; // Inizia a disegnare
+        //     ctxOperator.beginPath(); // Inizia un nuovo percorso
+        //     ctxOperator.moveTo(touch.clientX - canvasOperator.getBoundingClientRect().left, touch.clientY - canvasOperator.getBoundingClientRect().top); // Muove il punto di partenza
+        // });
 
         canvasOperator.addEventListener('touchmove', (e) => {
             e.preventDefault(); // Previene lo scrolling della pagina
@@ -648,7 +675,15 @@
             ctxClient.closePath(); // Chiude il percorso
         });
 
-        // Funzione per generare il PDF
+
+
+
+         // 
+        //######################################################### 
+        // Funzione per generare il pdf
+        //#########################################################
+        //   
+
         document.getElementById('generate-pdf').addEventListener('click', () => {
             const sede = document.getElementById('sede').value; // Ottiene il nome della sede
             const dataIntervento = document.getElementById('data-intervento').value; // Ottiene la data dell'intervento
@@ -688,6 +723,9 @@
                 console.error("Errore durante la generazione del PDF:", error); // Gestisce gli errori durante la generazione del PDF
             });
         });
+
+
+
 
 
         // 
@@ -799,7 +837,14 @@
             console.log("File di testo generato e scaricato come '" + a.download + "'."); // Messaggio di conferma
         }
 
-        // Funzione per caricare i dati dal file di testo
+
+
+
+          // 
+        //######################################################### 
+        // Funzione caricare i codici articolo da file di testo
+        //#########################################################
+        //   
         function loadArticoli() {
             fetch('Tabella articoli.txt') // Sostituisci con il percorso corretto del file
                 .then(response => response.text())
@@ -822,15 +867,17 @@
 
 
 
-        // funzione per aggiungere un operatore
+        // 
+        //######################################################### 
+        // Funzione per aggiungere operatore tramite pulsante +
+        //#########################################################
+        //   
         document.getElementById('add-operator').addEventListener('click', function() {
             count++; //aggiorna il contatore di operatori
             const operatorFieldContainer = document.getElementById('operator-field-container');
             const newField = document.createElement(`div`); // Crea un nuovo contenitore per il campo operatore
             newField.id = `operatoreNew${count}` // Imposta l'attributo id
             newField.className = 'field'; // Aggiungi la classe 'field' per lo stile
-            console.log(newField);
-            console.log(count);
             // Crea il nuovo campo di input per l'operatore
             let InHTML =`
                 <label for="operatore"${count} style="margin-left: 10px;">Operatore ${count}:</label>
@@ -844,17 +891,16 @@
                 </datalist>
             `;
             newField.innerHTML = InHTML;
-
             operatorFieldContainer.appendChild(newField); // Aggiungi il nuovo campo al contenitore
-            
-            
         });
+        
+        
 
+        //######################################################### 
+        // Funzione per rimuovere operatore tramite pulsante -
+        //#########################################################
+        // 
         document.getElementById('remove-operator').addEventListener('click', function() {
-            //const elementoContenitore = document.getElementById('operator-field-container');
-            //console.log(elementoContenitore);
-            //const idDinamico = `operatoreNew${count}`;
-            //console.log(idDinamico);
             const elemento = document.getElementById(`operatoreNew${count}`);
             console.log(elemento);
             if (elemento) {
