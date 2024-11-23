@@ -132,15 +132,23 @@
             margin: 5px 0; /* Spazio sopra e sotto la linea */
         }
         /* Aggiunto per impostare il colore di sfondo dei canvas */
-        .canvas-container canvas {
-            background-color: #d0cdff97; /* Colore giallo pastello */
-            border: 3px solid #2a11cb; /* Bordo nero per il canvas */
+       
+        .canvas-container {
             display: flex;
             flex-wrap: wrap;
             gap: 20px;
         }
+
+        canvas {
+            border: 1px solid #000;
+            background-color: #d0cdff97; /* Colore grigio pastello */
+            touch-action: none; /* Necessario per gestire il touch */
+        }
+
+
+
         /* Media queries per schermi più piccoli */
-        @media (max-width: 600px) {
+        @media (max-width: 2000px) {
             .field label {
                 width: 40%; /* Aumenta la larghezza delle etichette su schermi piccoli */
             }
@@ -155,6 +163,16 @@
 
             .content {
                 padding: 1rem; /* Riduce il padding per il contenuto su schermi piccoli */
+            }
+
+            .canvas-container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            canvas {
+                width: 90%;
+                height: auto;
             }
         }
     </style>
@@ -396,12 +414,12 @@
         <div style="display: flex; margin-top: 20px; align-items: stretch; width: 100%;"> <!-- Cambiato a 'stretch' per garantire che occupino la stessa altezza -->
             <div class="canvas-container" style="display: flex; flex-direction: column; align-items: center; flex: 1; margin-right: 20px;"> <!-- Contenitore per la firma operatore -->
                 <label>Firma Operatore Rokepo</label> <!-- Etichetta per la firma dell'operatore -->
-                <canvas id="signature-pad-operator" style=" width: 100%; height: 150px;"></canvas> <!-- Box per la firma operatore -->
+                <canvas id="canvas1" style=" width: 100%; height: 150px;"></canvas> <!-- Box per la firma operatore -->
                 <button id="clear-signature-operator" style="margin-top: 10px;">Pulisci Firma Operatore</button> <!-- Pulsante per pulire la firma operatore -->
             </div>
             <div class="canvas-container"style="display: flex; flex-direction: column; align-items: center; flex: 1;"> <!-- Contenitore per la firma cliente -->
                 <label>Firma Cliente</label> <!-- Etichetta per la firma del cliente -->
-                <canvas id="signature-pad-client" style=" width: 100%; height: 150px;"></canvas> <!-- Box per la firma cliente -->
+                <canvas id="canvas2" style=" width: 100%; height: 150px;"></canvas> <!-- Box per la firma cliente -->
                 <button id="clear-signature-client" style="margin-top: 10px;">Pulisci Firma Cliente</button> <!-- Pulsante per pulire la firma cliente -->
             </div>
         </div>
@@ -537,145 +555,89 @@
 
         // 
         //######################################################### 
-        // Funzione per le firme OPERATORE con touchscreen o mouse
+        // Funzione per le firme  con touchscreen o mouse
         //#########################################################
         //   
 
+// Seleziona i canvas e il contesto 2D
+const canvas1 = document.getElementById('canvas1');
+const canvas2 = document.getElementById('canvas2');
 
-        // Funzioni per la firma operatore
-        const off_set = 1.33;  //offset per il calcolo della posizione mouse
-        const canvasOperator = document.getElementById('signature-pad-operator'); // Trova il canvas per la firma dell'operatore
-        const ctxOperator = canvasOperator.getContext('2d'); // Ottiene il contesto 2D per il disegno
-        let drawingOperator = false; // Stato del disegno
+// Configura i canvas inizialmente
+[canvas1, canvas2].forEach((canvas) => {
+    canvas.width = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
+    resizeCanvas(canvas);
+    enableDrawing(canvas);
+});
+
+// Adatta le dimensioni dei canvas al ridimensionamento della finestra
+window.addEventListener('resize', () => {
+    [canvas1, canvas2].forEach(resizeCanvas);
+});
+
+function resizeCanvas(canvas) {
+    const parent = canvas.parentElement;
+    const size = Math.min(parent.clientWidth / 2 - 20, 400); // Dimensioni dinamiche
+    canvas.width = size;
+    canvas.height = size;
+}
+
+function enableDrawing(canvas) {
+    const ctx = canvas.getContext('2d');
+    let drawing = false;
+
+    const startDrawing = (event) => {
+        drawing = true;
+        ctx.beginPath();
+        const { x, y } = getCursorPosition(canvas, event);
+        ctx.moveTo(x, y);
+    };
+
+    const draw = (event) => {
+        if (!drawing) return;
+        const { x, y } = getCursorPosition(canvas, event);
+        console.log(`Mouse position: (${x}, ${y})`);
+        ctx.lineTo(x, y);
+        ctx.stroke();
+    };
+
+    const stopDrawing = () => {
+        drawing = false;
+        ctx.closePath();
+    };
+
+    const getCursorPosition = (canvas, event) => {
+        const rect = canvas.getBoundingClientRect();
+        console.log(`Canvas Dimensions ${rect.left} + ${rect.top}`);
+        console.log(event.touches ? event.touches[0].clientX : event.clientX);
+        const x = ((event.touches ? event.touches[0].clientX : event.clientX) - rect.left)/2.2;
+        const y = ((event.touches ? event.touches[0].clientY : event.clientY) - rect.top)*1.2;
+        return { x, y };
+    };
 
 
-      
+    
 
-        // Imposta il canvas per il disegno
-        canvasOperator.width = 300; // Larghezza del canvas
-        canvasOperator.height = 100; // Altezza del canvas
 
-        // Eventi per il disegno della firma dell'operatore
-        canvasOperator.addEventListener('mousedown', (e) => {
-            console.log("mousedown canvas Operator"); // Messaggio di conferma
-            drawingOperator = true; // Inizia a disegnare
-            ctxOperator.beginPath(); // Inizia un nuovo percorso
-            ctxOperator.moveTo(e.offsetX/off_set, e.offsetY/off_set); // Muove il punto di partenza
-        });
 
-        canvasOperator.addEventListener('mousemove', (e) => {
-            if (drawingOperator) { // Se si sta disegnando
-                ctxOperator.lineTo(e.offsetX/off_set, e.offsetY/off_set); // Disegna una linea fino alla posizione attuale
-                ctxOperator.stroke(); // Applica il tratto
-            }
-        });
 
-        canvasOperator.addEventListener('mouseup', () => {
-            drawingOperator = false; // Ferma il disegno
-            ctxOperator.closePath(); // Chiude il percorso
-        });
+    // Eventi per mouse e touchscreen
+    canvas.addEventListener('mousedown', startDrawing);
+    canvas.addEventListener('mousemove', draw);
+    canvas.addEventListener('mouseup', stopDrawing);
 
-        canvasOperator.addEventListener('mouseleave', () => {
-            drawingOperator = false; // Ferma il disegno se il mouse esce dal canvas
-            ctxOperator.closePath(); // Chiude il percorso
-        });
+    canvas.addEventListener('touchstart', startDrawing, { passive: false });
+    canvas.addEventListener('touchmove', draw, { passive: false });
+    canvas.addEventListener('touchend', stopDrawing);
 
-        document.getElementById('clear-signature-operator').addEventListener('click', () => {
-            ctxOperator.clearRect(0, 0, canvasOperator.width, canvasOperator.height); // Pulisce l'area della firma operatore
-        });
 
-        
-        
-        
-        
-         // 
-        //######################################################### 
-        // Funzione per le firme CLIENTE con touchscreen o mouse
-        //#########################################################
-        //   
-           
-         // Funzioni per la firma cliente
-         const canvasClient = document.getElementById('signature-pad-client'); // Trova il canvas per la firma del cliente
-         const ctxClient = canvasClient.getContext('2d'); // Ottiene il contesto 2D per il disegno
-         let drawingClient = false; // Stato del disegno
+    canvas.addEventListener('mousemove', (event) => {
+    const { x, y } = getCursorPosition(canvas, event);
+    
+});
 
-         // Imposta il canvas per il disegno
-         canvasClient.width = 300; // Larghezza del canvas
-         canvasClient.height = 100; // Altezza del canvas
-
-        // Eventi per il disegno della firma del cliente
-        canvasClient.addEventListener('mousedown', (e) => {
-            drawingClient = true; // Inizia a disegnare
-            ctxClient.beginPath(); // Inizia un nuovo percorso
-            ctxClient.moveTo(e.offsetX/off_set, e.offsetY/off_set); // Muove il punto di partenza
-        });
-
-        canvasClient.addEventListener('mousemove', (e) => {
-            if (drawingClient) { // Se si sta disegnando
-                ctxClient.lineTo(e.offsetX/off_set, e.offsetY/off_set); // Disegna una linea fino alla posizione attuale
-                ctxClient.stroke(); // Applica il tratto
-            }
-        });
-
-        canvasClient.addEventListener('mouseup', () => {
-            drawingClient = false; // Ferma il disegno
-            ctxClient.closePath(); // Chiude il percorso
-        });
-
-        canvasClient.addEventListener('mouseleave', () => {
-            drawingClient = false; // Ferma il disegno se il mouse esce dal canvas
-            ctxClient.closePath(); // Chiude il percorso
-        });
-
-        document.getElementById('clear-signature-client').addEventListener('click', () => {
-            ctxClient.clearRect(0, 0, canvasClient.width, canvasClient.height); // Pulisce l'area della firma cliente
-        });
-
-        // Supporto per il tocco (touch) per il canvas operatore
-        // canvasOperator.addEventListener('touchstart', (e) => {
-        //     e.preventDefault(); // Previene lo scrolling della pagina
-        //     const touch = e.touches[0]; // Ottiene il primo tocco
-        //     drawingOperator = true; // Inizia a disegnare
-        //     ctxOperator.beginPath(); // Inizia un nuovo percorso
-        //     ctxOperator.moveTo(touch.clientX - canvasOperator.getBoundingClientRect().left, touch.clientY - canvasOperator.getBoundingClientRect().top); // Muove il punto di partenza
-        // });
-
-        // canvasOperator.addEventListener('touchmove', (e) => {
-        //     e.preventDefault(); // Previene lo scrolling della pagina
-        //     if (drawingOperator) { // Se si sta disegnando
-        //         const touch = e.touches[0]; // Ottiene il primo tocco
-        //         ctxOperator.lineTo(touch.clientX - canvasOperator.getBoundingClientRect().left, touch.clientY - canvasOperator.getBoundingClientRect().top); // Disegna una linea fino alla posizione attuale
-        //         ctxOperator.stroke(); // Applica il tratto
-        //     }
-        // });
-
-        // canvasOperator.addEventListener('touchend', () => {
-        //     drawingOperator = false; // Ferma il disegno
-        //     ctxOperator.closePath(); // Chiude il percorso
-        // });
-
-        // Supporto per il tocco (touch) per il canvas cliente
-        canvasClient.addEventListener('touchstart', (e) => {
-            e.preventDefault(); // Previene lo scrolling della pagina
-            const touch = e.touches[0]; // Ottiene il primo tocco
-            drawingClient = true; // Inizia a disegnare
-            ctxClient.beginPath(); // Inizia un nuovo percorso
-            ctxClient.moveTo(touch.clientX - canvasClient.getBoundingClientRect().left, touch.clientY - canvasClient.getBoundingClientRect().top); // Muove il punto di partenza
-        });
-
-        canvasClient.addEventListener('touchmove', (e) => {
-            e.preventDefault(); // Previene lo scrolling della pagina
-            if (drawingClient) { // Se si sta disegnando
-                const touch = e.touches[0]; // Ottiene il primo tocco
-                ctxClient.lineTo(touch.clientX - canvasClient.getBoundingClientRect().left, touch.clientY - canvasClient.getBoundingClientRect().top); // Disegna una linea fino alla posizione attuale
-                ctxClient.stroke(); // Applica il tratto
-            }
-        });
-
-        canvasClient.addEventListener('touchend', () => {
-            drawingClient = false; // Ferma il disegno
-            ctxClient.closePath(); // Chiude il percorso
-        });
+}
 
 
 
