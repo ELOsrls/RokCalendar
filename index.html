@@ -186,7 +186,9 @@
         <img src="rokepo-logo.jpg" alt="Logo Rokepo" class="logo"> <!-- Logo dell'azienda -->
         <!-- <h1>Modulo Intervento</h1> --> <!-- Titolo principale (commentato) -->
     </div>
+    <!-- Container principale -------------------------- -->
     <div class="content">
+        <!-- Box informazioni di base ------------------ -->
         <div class="info-box">
             <div id="operator-field-container"> <!-- Contenitore per i campi operatore -->
                 <div class="field" id="operator-field1">
@@ -217,6 +219,7 @@
                 <input type="text" id="sede" style="width: calc(100% - 200px); margin-right: 10px;" onfocus="startDictation(this)"> <!-- Campo di input per la sede con supporto per la dettatura -->
             </div>
         </div>
+        <!-- CheckBox tipo di intervento --------------- -->
         <div class="checkbox-group">
             <div class="checkbox-title">Motivo dell'intervento presso il cliente:</div> <!-- Titolo per il gruppo di checkbox -->
             <div class="checkbox-label">
@@ -289,9 +292,11 @@
                 </div>
             </div>
         </div>
+        <!-- Testo per le note ------------------------- -->
         <div class="note">
             N.B. Nel momento in cui è stato scelto il campo assistenza, il presente modulo viene utilizzato dal personale amministrativo della ROKEPO per procedere all'attività di fatturazione. <!-- Nota informativa -->
         </div>
+        <!-- Tabella lavori eseguiti ------------------- -->
         <div class="work-table">
             <table>
                 <thead>
@@ -358,6 +363,7 @@
                 </tfoot>
             </table>
         </div>
+        <!-- Tabella prodotti utilizzati --------------- -->
         <div class="work-table">
             <table style="width: 100%; margin-top: 20px;">
                 <thead>
@@ -394,26 +400,29 @@
                 </tbody>
             </table>
         </div>
-        <div style="margin-top: 20px; display: flex; width: 100%; align-items: center;">
-            <label style="margin-right: 10px;">Ulteriori prodotti da fatturare consegnati con il DDT N°:</label> <!-- Etichetta per ulteriori prodotti -->
-            <input type="text" placeholder="Numero DDT" style="width: 100px; margin-right: 10px;"> <!-- Campo per il numero DDT -->
-            <label style="margin-right: 5px;">del</label> <!-- Etichetta per la data Del -->
-            <input type="date" style="margin-left: 10px;"> <!-- Campo per la data Del -->
-        </div>
-        <div style="margin-top: 20px; display: flex; align-items: center;"> <!-- Nuova riga per chilometri e ore di viaggio -->
-            <label style="margin-right: 10px;">Chilometri percorsi per raggiungere il cliente e ritornare Km:</label> <!-- Etichetta per i chilometri -->
-            <input type="number" placeholder="Km" style="width: 100px; margin-right: 10px;"> <!-- Campo per i chilometri -->
-            <label style="font-size: small; margin-right: 5px;">Ore viaggio:</label> <!-- Etichetta per le ore di viaggio -->
-            <input type="text" placeholder="Ore-Viaggio" style="width: 100px; margin-left: 10px;"> <!-- Campo per le ore di viaggio -->
-        </div>
-        <div style="margin-top: 20px; display: flex; align-items: center;"> <!-- Nuova riga per Stato intervento -->
-            <label style="margin-right: 10px;">Stato intervento: CONCLUSO</label> <!-- Etichetta per lo stato dell'intervento -->
-            <select style="margin-right: 10px;"> <!-- Selettore per lo stato dell'intervento -->
-                <option value="si">Sì</option> <!-- Opzione Sì -->
-                <option value="no">No</option> <!-- Opzione No -->
-            </select>
-            <label style="margin-right: 5px;">Note:</label> <!-- Etichetta per eventuali note -->
-            <input type="text" placeholder="Eventuali note" style="width: 200px;"> <!-- Campo per eventuali note di testo -->
+        <!-- Dati finali  ------------------------------- -->
+        <div class="info-box">
+            <div style="margin-top: 20px; display: flex; width: 100%; align-items: center;">
+                <label style="margin-right: 10px; margin-left: 10px">Ulteriori prodotti da fatturare consegnati con il DDT N°:</label> <!-- Etichetta per ulteriori prodotti -->
+                <input type="text" placeholder="Numero DDT" style="width: 100px; margin-right: 10px;"> <!-- Campo per il numero DDT -->
+                <label style="margin-right: 5px;">del</label> <!-- Etichetta per la data Del -->
+                <input type="date" style="margin-left: 10px;"> <!-- Campo per la data Del -->
+            </div>
+            <div style="margin-top: 20px; display: flex; align-items: center;"> <!-- Nuova riga per chilometri e ore di viaggio -->
+                <label style="margin-right: 10px;margin-left: 10px">Chilometri percorsi per raggiungere il cliente e ritornare Km:</label> <!-- Etichetta per i chilometri -->
+                <input type="number" placeholder="Km" style="width: 100px; margin-right: 10px;"> <!-- Campo per i chilometri -->
+                <label style="font-size: small; margin-right: 5px;">Ore viaggio:</label> <!-- Etichetta per le ore di viaggio -->
+                <input type="text" placeholder="Ore-Viaggio" style="width: 100px; margin-left: 10px;"> <!-- Campo per le ore di viaggio -->
+            </div>
+            <div style="margin-top: 20px; display: flex; align-items: center;"> <!-- Nuova riga per Stato intervento -->
+                <label style="margin-right: 10px;margin-left: 10px ">Stato intervento: CONCLUSO</label> <!-- Etichetta per lo stato dell'intervento -->
+                <select style="margin-right: 10px;"> <!-- Selettore per lo stato dell'intervento -->
+                    <option value="si">Sì</option> <!-- Opzione Sì -->
+                    <option value="no">No</option> <!-- Opzione No -->
+                    </select>
+                <label style="margin-right: 5px;">Note:</label> <!-- Etichetta per eventuali note -->
+                <input type="text" placeholder="Eventuali note" style="width: 200px; margin-bottom: 10px"> <!-- Campo per eventuali note di testo -->
+            </div>
         </div>
         <div style="display: flex; margin-top: 20px; align-items: stretch; width: 100%;"> <!-- Cambiato a 'stretch' per garantire che occupino la stessa altezza -->
             <div class="canvas-container" style="display: flex; flex-direction: column; align-items: center; margin-right: 20px;"> <!-- Contenitore per la firma operatore -->
@@ -563,85 +572,81 @@
         //#########################################################
         //   
 
-// Seleziona i canvas e il contesto 2D
-const canvas1 = document.getElementById('canvas1');
-const canvas2 = document.getElementById('canvas2');
+        // Seleziona i canvas e il contesto 2D
+        const canvas1 = document.getElementById('canvas1');
+        const canvas2 = document.getElementById('canvas2');
+        // Configura i canvas inizialmente
+        [canvas1, canvas2].forEach((canvas) => {
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+            console.log(`Canvas Dimension init:  ${canvas.width} - ${canvas.height}`);
+            resizeCanvas(canvas);
+        enableDrawing(canvas);
+        });
 
-// Configura i canvas inizialmente
-[canvas1, canvas2].forEach((canvas) => {
-    canvas.width = canvas.offsetWidth;
-    canvas.height = canvas.offsetHeight;
-    resizeCanvas(canvas);
-    enableDrawing(canvas);
-});
+        // Adatta le dimensioni dei canvas al ridimensionamento della finestra
+            window.addEventListener('resize', () => {
+            [canvas1, canvas2].forEach(resizeCanvas);
+        });
 
-// Adatta le dimensioni dei canvas al ridimensionamento della finestra
-window.addEventListener('resize', () => {
-    [canvas1, canvas2].forEach(resizeCanvas);
-});
+        function resizeCanvas(canvas) {
+             //const parent = canvas.parentElement;
+             //const size = Math.min(parent.clientWidth / 2 - 20, 400); // Dimensioni dinamiche
+             //canvas.width = size;
+             //canvas.height = parent;
+             //console.log(`Canvas Dimension var:  ${canvas.width} + ${canvas.height}`);
+        }
 
-function resizeCanvas(canvas) {
-    const parent = canvas.parentElement;
-    const size = Math.min(parent.clientWidth / 2 - 20, 400); // Dimensioni dinamiche
-    canvas.width = size;
-    canvas.height = size;
-}
+        function enableDrawing(canvas) {
+            const ctx = canvas.getContext('2d');
+            let drawing = false;
+            const startDrawing = (event) => {
+                drawing = true;
+                ctx.beginPath();
+                const { x, y } = getCursorPosition(canvas, event);
+                ctx.moveTo(x, y);
+            };
 
-function enableDrawing(canvas) {
-    const ctx = canvas.getContext('2d');
-    let drawing = false;
+            const draw = (event) => {
+            if (!drawing) return;
+                const rect = canvas.getBoundingClientRect();
+                const { x, y } = getCursorPosition(canvas, event);
+                console.log(`Canvas position ${rect.left} + ${rect.top}`);
+                console.log("x"+((event.touches ? event.touches[0].clientX : event.clientX)));
+                console.log("Y"+((event.touches ? event.touches[0].clientY : event.clientY)))
+                console.log(`Line position: (${x}, ${y})`);
+                ctx.lineTo(x, y);
+                ctx.stroke();
+            };
 
-    const startDrawing = (event) => {
-        drawing = true;
-        ctx.beginPath();
-        const { x, y } = getCursorPosition(canvas, event);
-        ctx.moveTo(x, y);
-    };
+            const stopDrawing = () => {
+                drawing = false;
+                ctx.closePath();
+            };
 
-    const draw = (event) => {
-        if (!drawing) return;
-        const { x, y } = getCursorPosition(canvas, event);
-        console.log(`Mouse position: (${x}, ${y})`);
-        ctx.lineTo(x, y);
-        ctx.stroke();
-    };
-
-    const stopDrawing = () => {
-        drawing = false;
-        ctx.closePath();
-    };
-
-    const getCursorPosition = (canvas, event) => {
-        const rect = canvas.getBoundingClientRect();
-        console.log(`Canvas Dimensions ${rect.left} + ${rect.top}`);
-        console.log(event.touches ? event.touches[0].clientX : event.clientX);
-        const x = ((event.touches ? event.touches[0].clientX : event.clientX) - rect.left)/2.2;
-        const y = ((event.touches ? event.touches[0].clientY : event.clientY) - rect.top)*1.2;
-        return { x, y };
-    };
-
-
-    
-
+            const getCursorPosition = (canvas, event) => {
+                const rect = canvas.getBoundingClientRect();
+                const x = ((event.touches ? event.touches[0].clientX : event.clientX) - rect.left);
+                const y = ((event.touches ? event.touches[0].clientY : event.clientY) - rect.top);
+                return { x, y };
+            };
 
 
+            // Eventi per mouse e touchscreen
+            canvas.addEventListener('mousedown', startDrawing);
+            canvas.addEventListener('mousemove', draw);
+            canvas.addEventListener('mouseup', stopDrawing);
 
-    // Eventi per mouse e touchscreen
-    canvas.addEventListener('mousedown', startDrawing);
-    canvas.addEventListener('mousemove', draw);
-    canvas.addEventListener('mouseup', stopDrawing);
-
-    canvas.addEventListener('touchstart', startDrawing, { passive: false });
-    canvas.addEventListener('touchmove', draw, { passive: false });
-    canvas.addEventListener('touchend', stopDrawing);
+            canvas.addEventListener('touchstart', startDrawing, { passive: false });
+            canvas.addEventListener('touchmove', draw, { passive: false });
+            canvas.addEventListener('touchend', stopDrawing);
 
 
-    canvas.addEventListener('mousemove', (event) => {
-    const { x, y } = getCursorPosition(canvas, event);
-    
-});
+            canvas.addEventListener('mousemove', (event) => {
+                const { x, y } = getCursorPosition(canvas, event);
+            });
 
-}
+        }
 
 
 
@@ -878,6 +883,5 @@ function enableDrawing(canvas) {
             }    
         });
     </script>
-    
 </body>
 </html>
