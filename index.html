@@ -348,7 +348,7 @@
                     <tr>
                         <td colspan="3" style="text-align: right;"><strong>Numero di addetti:</strong></td> <!-- Numero di addetti -->
                         <td>
-                            <input type="number" id="numero-addetti" min="1" style="width: 50px;" oninput="updateTotalHours();"> <!-- Campo per il numero di addetti -->
+                            <input type="number" id="numero-addetti" value="1" min="1" style="width: 50px;" oninput="updateTotalHours();"> <!-- Campo per il numero di addetti -->
                         </td>
                     </tr>
                     <tr>
@@ -693,6 +693,38 @@
             }).catch(error => {
                 console.error("Errore durante la generazione del PDF:", error); // Gestisce gli errori durante la generazione del PDF
             });
+
+
+
+
+
+
+            const email = "salvatorebruno@rokepo.it";
+            const subject = `Modulo Intervento per - ${sede} - ${formattedDate}.pdf`;
+            const body =` Inserire negli allegati il file: Modulo Intervento - ${sede} - ${formattedDate}.pdf`;
+
+            const mailtoLink = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            window.location.href = mailtoLink;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         });
 
 
@@ -808,30 +840,6 @@
             console.log("File di testo generato e scaricato come '" + a.download + "'."); // Messaggio di conferma
 
 
-            // dopoo aver genrato i files inviali tramite email
-            // Create the popup component
-            const popup = document.createElement('div');
-            popup.innerHTML = `
-              <h2>Invia PDF</h2>
-              <input type="email" id="recipient1" placeholder="Indirizzo email 1">
-              <input type="email" id="recipient2" placeholder="Indirizzo email 2">
-              <button id="send-button">Invia</button>
-            `;
-            
-            // Add event listener to the "Send" button
-            document.getElementById('send-button').addEventListener('click', () => {
-              const recipient1 = document.getElementById('recipient1').value;
-              const recipient2 = document.getElementById('recipient2').value;
-              // Call the API endpoint to send the email
-              fetch('/send-email', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ recipient1, recipient2, pdfFiles: generatedPdfFiles }),
-              })
-                .then((response) => response.json())
-                .then((data) => console.log(data))
-                .catch((error) => console.error(error));
-            });
 
         }
 
@@ -890,6 +898,8 @@
             `;
             newField.innerHTML = InHTML;
             operatorFieldContainer.appendChild(newField); // Aggiungi il nuovo campo al contenitore
+            const textbox = document.getElementById("numero-addetti");
+            textbox.value = count;  
         });
         
         
@@ -906,6 +916,8 @@
                 count--; //aggiorna il contatore di operatori
                 console.log('Elemento rimosso');
             }    
+            const textbox = document.getElementById("numero-addetti");
+            textbox.value = count;  
         });
         
 
