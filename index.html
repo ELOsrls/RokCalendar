@@ -1,6 +1,7 @@
 <!-- 
  ######################################################### 
  MODULO INTERVENTO ON LINE
+ Rokepo srl - V2.05 - 11-2024
  #########################################################
 -->
 
@@ -309,35 +310,31 @@
                 </thead>
                 <tbody>
                     <tr>
+                        <!-- Descrizione lavoro 1 -->
                         <td>
-                            <input type="text" placeholder="Descrizione lavoro 1" list="articoli1" style="width: 100%;" onfocus="startDictation(this)">
-                            <datalist id="articoli1"></datalist> <!-- Datalist vuoto -->
+                            <textarea id="descrizione-lavoro-1" placeholder="Descrizione lavoro 1" rows="1" style="width: 100%; box-sizing: border-box;" onfocus="startDictation(this)" ></textarea>
                         </td>
                         <td><input type="time" class="start-time" style="width: 100%;" onchange="calculateTotal(this)"></td>
                         <td><input type="time" class="end-time" style="width: 100%;" onchange="calculateTotal(this)"></td>
                         <td><input type="text" placeholder="Ore" class="total-hours" style="width: 100%;" disabled></td>
                     </tr>
-                    <!-- Ripetere per ulteriori lavori -->
+                    <!-- Descrizione lavoro 2 -->
                     <tr>
-                        <td><input type="text" placeholder="Descrizione lavoro 2" style="width: 100%;" onfocus="startDictation(this)"></td>
+                        <td><textarea id="descrizione-lavoro-2" placeholder="Descrizione lavoro 2" rows="1" style="width: 100%; box-sizing: border-box;" onfocus="startDictation(this)" ></textarea></td>
                         <td><input type="time" class="start-time" style="width: 100%;" onchange="calculateTotal(this)"></td>
                         <td><input type="time" class="end-time" style="width: 100%;" onchange="calculateTotal(this)"></td>
                         <td><input type="text" placeholder="Ore" class="total-hours" style="width: 100%;" disabled></td> <!-- Nuovo campo per totale ore lavorate -->
                     </tr>
+                    <!-- Descrizione lavoro 3 -->
                     <tr>
-                        <td><input type="text" placeholder="Descrizione lavoro 3" style="width: 100%;" onfocus="startDictation(this)"></td>
+                        <td><textarea id="descrizione-lavoro-3" placeholder="Descrizione lavoro 3" rows="1" style="width: 100%; box-sizing: border-box;" onfocus="startDictation(this)" ></textarea></td>
                         <td><input type="time" class="start-time" style="width: 100%;" onchange="calculateTotal(this)"></td>
                         <td><input type="time" class="end-time" style="width: 100%;" onchange="calculateTotal(this)"></td>
                         <td><input type="text" placeholder="Ore" class="total-hours" style="width: 100%;" disabled></td> <!-- Nuovo campo per totale ore lavorate -->
                     </tr>
+                    <!-- Descrizione lavoro 4 -->
                     <tr>
-                        <td><input type="text" placeholder="Descrizione lavoro 4" style="width: 100%;" onfocus="startDictation(this)"></td>
-                        <td><input type="time" class="start-time" style="width: 100%;" onchange="calculateTotal(this)"></td>
-                        <td><input type="time" class="end-time" style="width: 100%;" onchange="calculateTotal(this)"></td>
-                        <td><input type="text" placeholder="Ore" class="total-hours" style="width: 100%;" disabled></td> <!-- Nuovo campo per totale ore lavorate -->
-                    </tr>
-                    <tr>
-                        <td><input type="text" placeholder="Descrizione lavoro 5" style="width: 100%;" onfocus="startDictation(this)"></td>
+                        <td><textarea id="descrizione-lavoro-4" placeholder="Descrizione lavoro 4" rows="1" style="width: 100%; box-sizing: border-box;" onfocus="startDictation(this)" ></textarea></td>
                         <td><input type="time" class="start-time" style="width: 100%;" onchange="calculateTotal(this)"></td>
                         <td><input type="time" class="end-time" style="width: 100%;" onchange="calculateTotal(this)"></td>
                         <td><input type="text" placeholder="Ore" class="total-hours" style="width: 100%;" disabled></td> <!-- Nuovo campo per totale ore lavorate -->
@@ -378,22 +375,23 @@
                 </thead>
                 <tbody>
                     <tr>
+                        <datalist id="articoli1"></datalist> <!-- Datalist vuoto -->
                         <td><input type="text" placeholder="Prodotto 1" list="articoli1" style="width: 100%;"  onfocus="startDictation(this)"></td> <!-- Campo per il nome del prodotto 1 -->
                         <td><input type="number" placeholder="Quantità" style="width: 100%;"></td> <!-- Campo per la quantità del prodotto 1 -->
                         <td><input type="text" placeholder="Note" style="width: 100%;" onfocus="startDictation(this)"></td> <!-- Campo per eventuali note sul prodotto 1 -->
                     </tr>
                     <tr>
-                        <td><input type="text" placeholder="Prodotto 2" style="width: 100%;" onfocus="startDictation(this)"></td> <!-- Campo per il nome del prodotto 2 -->
+                        <td><input type="text" placeholder="Prodotto 2" list="articoli1" style="width: 100%;" onfocus="startDictation(this)"></td> <!-- Campo per il nome del prodotto 2 -->
                         <td><input type="number" placeholder="Quantità" style="width: 100%;"></td> <!-- Campo per la quantità del prodotto 2 -->
                         <td><input type="text" placeholder="Note" style="width: 100%;" onfocus="startDictation(this)"></td> <!-- Campo per eventuali note sul prodotto 2 -->
                     </tr>
                     <tr>
-                        <td><input type="text" placeholder="Prodotto 3" style="width: 100%;" onfocus="startDictation(this)"></td> <!-- Campo per il nome del prodotto 3 -->
+                        <td><input type="text" placeholder="Prodotto 3" list="articoli1" style="width: 100%;" onfocus="startDictation(this)"></td> <!-- Campo per il nome del prodotto 3 -->
                         <td><input type="number" placeholder="Quantità" style="width: 100%;"></td> <!-- Campo per la quantità del prodotto 3 -->
                         <td><input type="text" placeholder="Note" style="width: 100%;" onfocus="startDictation(this)"></td> <!-- Campo per eventuali note sul prodotto 3 -->
                     </tr>
                     <tr>
-                        <td><input type="text" placeholder="Prodotto 4" style="width: 100%;" onfocus="startDictation(this)"></td> <!-- Campo per il nome del prodotto 4 -->
+                        <td><input type="text" placeholder="Prodotto 4" list="articoli1" style="width: 100%;" onfocus="startDictation(this)"></td> <!-- Campo per il nome del prodotto 4 -->
                         <td><input type="number" placeholder="Quantità" style="width: 100%;"></td> <!-- Campo per la quantità del prodotto 4 -->
                         <td><input type="text" placeholder="Note" style="width: 100%;" onfocus="startDictation(this)"></td> <!-- Campo per eventuali note sul prodotto 4 -->
                     </tr>
@@ -808,6 +806,33 @@
             document.body.removeChild(a); // Rimuove il link dal documento
             URL.revokeObjectURL(url); // Libera la memoria
             console.log("File di testo generato e scaricato come '" + a.download + "'."); // Messaggio di conferma
+
+
+            // dopoo aver genrato i files inviali tramite email
+            // Create the popup component
+            const popup = document.createElement('div');
+            popup.innerHTML = `
+              <h2>Invia PDF</h2>
+              <input type="email" id="recipient1" placeholder="Indirizzo email 1">
+              <input type="email" id="recipient2" placeholder="Indirizzo email 2">
+              <button id="send-button">Invia</button>
+            `;
+            
+            // Add event listener to the "Send" button
+            document.getElementById('send-button').addEventListener('click', () => {
+              const recipient1 = document.getElementById('recipient1').value;
+              const recipient2 = document.getElementById('recipient2').value;
+              // Call the API endpoint to send the email
+              fetch('/send-email', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ recipient1, recipient2, pdfFiles: generatedPdfFiles }),
+              })
+                .then((response) => response.json())
+                .then((data) => console.log(data))
+                .catch((error) => console.error(error));
+            });
+
         }
 
 
@@ -882,6 +907,21 @@
                 console.log('Elemento rimosso');
             }    
         });
+        
+
+        //######################################################### 
+        // Funzione per alzare le dimensioni delle textarea in altezza in base al numero di righe scritte
+        //#########################################################
+        // 
+
+        const textarea = document.getElementById('descrizione-lavoro-1');
+
+        textarea.addEventListener('input', () => {
+        textarea.style.height = 'auto';
+        textarea.style.height = textarea.scrollHeight + 'px';
+        });
+
+
     </script>
 </body>
 </html>
